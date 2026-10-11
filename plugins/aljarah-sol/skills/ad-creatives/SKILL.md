@@ -18,4 +18,6 @@ Follow `brand-voice`. On-screen text and captions are in Spanish.
 5. Each creative = hook (first 1–2 s) + 2–3 benefit beats + CTA + price. Make 3–5 variants per test.
 6. Don't claim performance or health effects. Delivery promise must match the policy: 6–12 working days.
 
+7. Follow the lessons and prompt library in `creatives/runway-prompts-es.md`: image-first with @outfit reference, small motion, clips ≤ 2 s, no racket in frame, one person per shot.
+
 Campaign briefs live in `creatives/`. Add new campaigns as `creatives/<campaign>.md`.
