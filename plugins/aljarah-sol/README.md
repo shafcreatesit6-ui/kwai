@@ -5,6 +5,8 @@ Company-specific Claude plugin for **Aljarah Sol** (aljarahsol.com), a Spanish-l
 - `skills/brand-voice`: company profile, catalogue and tone of voice
 - `skills/product-listing`: house format for Shopify listings
 - `skills/customer-support`: support reply guidelines
+- `skills/ad-creatives`: ad creative rules, built on the Runway plugin (runway-api)
+- `creatives/`: campaign briefs (pádel campaign 01)
 - `/new-product`, `/weekly-report`: commands
 
 Works best with the Shopify connector enabled. Catalogue details reflect the store as of Oct 2026, so refresh them when the range changes.
