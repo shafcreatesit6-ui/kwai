@@ -51,3 +51,37 @@ Perfecto para las tardes de otoño en la pista.
 ```
 
 AI-label aanzetten bij posten.
+
+---
+
+# Versie 2 – relaxter + juist "AS"-logo
+
+Startbeeld: `aljarah-welcome-photo-v2.png` (logo "AS" gefixt, nek relaxter).
+
+## Stap 1b – Foto-edit (Nano Banana 2.1)
+
+- Ratio: `1536:2752`
+- Referentiebeeld: de foto uit stap 1, getagd als `@frame`
+
+```
+Edit @frame. Only change two things:
+1) On the brown padel racket, replace the logo with clean, elegant gold serif capital letters reading exactly "AS" (letter A on the left, letter S on the right, normal reading direction, not mirrored, not stacked), small and centered above the holes. Remove any other small text or marks on the racket.
+2) Make her neck and throat look soft and relaxed: no visible tense tendons or strained neck muscles, shoulders relaxed and slightly lowered, a calm natural smile.
+Keep everything else exactly the same: her face, blonde wavy hair, white long-sleeve cropped top, white pleated skort, pose, raised waving hand, the Madrid rooftop padel court, Cuatro Torres skyline and the golden hour light. Only one person.
+```
+
+## Stap 2 v2 – Video (Kling 3.0 Pro)
+
+- Startbeeld: `aljarah-welcome-photo-v2.png`
+- Ratio: `1080:1920` · Duur: 10 sec · Audio: aan
+
+```
+Realistic handheld influencer video, vertical. Rooftop padel court in Madrid at golden hour, Cuatro Torres skyline behind her. Only ONE person in the entire video: the blonde woman. No other people, no ball, no text, no flying objects.
+Her whole body language is calm, soft and relaxed: relaxed neck and throat with no visible tense tendons or strained neck muscles, shoulders loose and low, gentle natural facial expressions, small natural mouth movements while speaking, never opening her mouth wide, no exaggerated or intense expressions.
+Seconds 0-2: she gives a small, easy wave with her left hand and smiles softly.
+Seconds 2-8: she takes two slow, relaxed steps toward the camera and talks to the lens in a calm, warm, conversational way, natural lip sync, and says: "¡Hola! Soy Aljarah... Bienvenidas a Aljarah Sol: ropa de pádel con alma de sol."
+Seconds 8-10: she tilts her head slightly, gives a gentle wink and says softly: "¿Nos vemos en la pista?" with a relaxed smile.
+Her brown padel racket stays lowered in her right hand at her side the whole time, the gold "AS" logo unchanged and readable (A then S, never mirrored).
+The camera slowly pushes in from knees-up to a waist-up shot. Her long wavy blonde hair moves gently in the breeze. Keep her face, the white long-sleeve cropped top with thumbholes, the white pleated skort and the racket exactly the same.
+Voice: soft, warm, relaxed young female voice, native Spanish from Spain (Castilian accent), speaking at a calm pace, not loud. Audio: her voice clear and upfront, light wind, distant city ambience, soft chill music in the background.
+```
