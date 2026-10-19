@@ -26,14 +26,30 @@
       }
     }
 
+    // pijltjes en teller (1/5) van de grote foto's gelijkzetten met het nieuwe aantal
+    var viewerEl = gallery.querySelector('#GalleryViewer-' + sectionId);
+    var newViewerEl = newGallery.querySelector('#GalleryViewer-' + sectionId);
+    if (viewerEl && newViewerEl) {
+      var buttons = viewerEl.querySelector('.slider-buttons');
+      var newButtons = newViewerEl.querySelector('.slider-buttons');
+      if (buttons && newButtons) buttons.className = newButtons.className;
+      var total = viewerEl.querySelector('.slider-counter--total');
+      var newTotal = newViewerEl.querySelector('.slider-counter--total');
+      if (total && newTotal) total.textContent = newTotal.textContent;
+      var current = viewerEl.querySelector('.slider-counter--current');
+      if (current) current.textContent = '1';
+      if (viewerEl.resetPages) viewerEl.resetPages();
+    }
+
     var thumbs = gallery.querySelector('#GalleryThumbnails-' + sectionId);
     if (!thumbs) return;
     var newThumbs = newGallery.querySelector('#GalleryThumbnails-' + sectionId);
+    // het hidden-attribuut wordt door de thema-CSS overschreven: display gebruiken
     if (!newThumbs) {
-      thumbs.hidden = true;
+      thumbs.style.display = 'none';
       return;
     }
-    thumbs.hidden = false;
+    thumbs.style.display = '';
     thumbs.className = newThumbs.className;
 
     var thumbList = thumbs.querySelector('#Slider-Thumbnails-' + sectionId);
