@@ -1,0 +1,246 @@
+{%- comment -%}
+  AP welkomst-popup — 10% welkomstkorting.
+  Na aanmelden verschijnt direct een bedankt-scherm met de kortingscode (kopieerknop) en confetti.
+{%- endcomment -%}
+{%- liquid
+  # Halloween -25% tot en met zondag 1 nov 2026 23:59 (Spaanse tijd); daarna weer de gewone instellingen
+  assign ap_pop_now = 'now' | date: '%s' | plus: 0
+  if ap_pop_now < 1793573999
+    assign ap_hw = true
+    assign ap_pop_image = images['aljarah-padel-manga-larga-blanco-smash-mobile.jpg']
+    assign ap_pop_eyebrow = 'Halloween Sale'
+    assign ap_pop_heading = '25% de descuento en todo'
+    assign ap_pop_text = 'Solo hasta el 1 de noviembre. Déjanos tu email y te damos tu código al momento.'
+    assign ap_pop_button = 'Quiero mi 25%'
+    assign ap_pop_s_eyebrow = 'Ya eres de las nuestras'
+    assign ap_pop_s_heading = '¡Aquí tienes tu código!'
+    assign ap_pop_s_text = 'Introdúcelo al finalizar la compra y ahorra un 25% en todo:'
+    assign ap_pop_code = 'HALLOWEEN25'
+    assign ap_pop_note = 'Válido hasta el 1 de noviembre a las 23:59. Un uso por cliente.'
+    assign ap_pop_tags = 'newsletter,halloween'
+  else
+    assign ap_hw = false
+    assign ap_pop_image = section.settings.image
+    assign ap_pop_eyebrow = section.settings.eyebrow
+    assign ap_pop_heading = section.settings.heading
+    assign ap_pop_text = section.settings.text
+    assign ap_pop_button = section.settings.button_label
+    assign ap_pop_s_eyebrow = section.settings.success_eyebrow
+    assign ap_pop_s_heading = section.settings.success_heading
+    assign ap_pop_s_text = section.settings.success_text
+    assign ap_pop_code = section.settings.code
+    assign ap_pop_note = section.settings.success_note
+    assign ap_pop_tags = 'newsletter,bienvenida'
+  endif
+-%}
+
+<div
+  class="ap-pop"
+  id="ApPop-{{ section.id }}"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="ApPopTitle-{{ section.id }}"
+  data-enabled="{{ section.settings.enable }}"
+  data-delay="{{ section.settings.delay }}"
+  data-days="{{ section.settings.dismiss_days }}"
+  hidden
+>
+  <div class="ap-pop__overlay" data-ap-pop-close><span class="visually-hidden">Cerrar</span></div>
+  <div class="ap-pop__card color-{{ section.settings.color_scheme }} gradient" tabindex="-1">
+    <button type="button" class="ap-pop__close" data-ap-pop-close aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    {%- if ap_pop_image != blank -%}
+      <div class="ap-pop__media">
+        {{ ap_pop_image | image_url: width: 900 | image_tag: widths: '450, 900', sizes: '(min-width: 750px) 380px, 100vw', loading: 'lazy', alt: '' }}
+      </div>
+    {%- endif -%}
+    <div class="ap-pop__body">
+      {%- assign ap_return = request.path | append: '?welkom=1' -%}
+      {%- form 'customer', id: 'ApPopForm', return_to: ap_return -%}
+        <div class="ap-pop__step" data-ap-step="form"{% if form.posted_successfully? %} hidden{% endif %}{% if form.errors %} data-ap-errors{% endif %}>
+          <p class="ap-pop__eyebrow">{{ ap_pop_eyebrow | escape }}</p>
+          <h2 class="ap-pop__title" id="ApPopTitle-{{ section.id }}">{{ ap_pop_heading | escape }}</h2>
+          <p class="ap-pop__text">{{ ap_pop_text | escape }}</p>
+          <input type="hidden" name="contact[tags]" value="{{ ap_pop_tags }}">
+          <label class="visually-hidden" for="ApPopEmail-{{ section.id }}">Correo electrónico</label>
+          <input id="ApPopEmail-{{ section.id }}" class="ap-pop__input" type="email" name="contact[email]" value="{{ form.email }}" required autocomplete="email" placeholder="Tu correo electrónico">
+          <button type="submit" class="ap-pop__cta">{{ ap_pop_button | escape }}</button>
+          {%- if form.errors -%}
+            <p class="ap-pop__error">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+          {%- endif -%}
+          <button type="button" class="ap-pop__no" data-ap-pop-close>No, gracias</button>
+          <p class="ap-pop__consent">Recibirás correos con novedades y ofertas. Puedes darte de baja cuando quieras. Consulta nuestra <a href="{{ routes.root_url }}policies/privacy-policy">política de privacidad</a>.</p>
+        </div>
+        <div class="ap-pop__step ap-pop__step--done" data-ap-step="done"{% unless form.posted_successfully? %} hidden{% endunless %}>
+          <p class="ap-pop__eyebrow">{{ ap_pop_s_eyebrow | escape }}</p>
+          <h2 class="ap-pop__title" id="ApPopDone-{{ section.id }}">{{ ap_pop_s_heading | escape }}</h2>
+          <p class="ap-pop__text">{{ ap_pop_s_text | escape }}</p>
+          {%- if ap_pop_code != blank -%}
+            <div class="ap-pop__code">
+              <span data-ap-code>{{ ap_pop_code | escape }}</span>
+              <button type="button" data-ap-copy>Copiar</button>
+            </div>
+          {%- endif -%}
+          {%- if ap_pop_note != blank -%}
+            <p class="ap-pop__note">{{ ap_pop_note | escape }}</p>
+          {%- endif -%}
+          <button type="button" class="ap-pop__cta" data-ap-pop-close>Seguir comprando</button>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .ap-pop { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; padding: 1.6rem; }
+  .ap-pop[hidden] { display: none; }
+  .ap-pop__overlay { position: absolute; inset: 0; background: rgba(31,26,22,.55); backdrop-filter: blur(2px); }
+  .ap-pop__card {
+    position: relative; width: 100%; max-width: 76rem; max-height: 90vh; overflow: auto; display: grid;
+    box-shadow: 0 2rem 6rem rgba(0,0,0,.25); animation: apPopIn .45s ease;
+  }
+  .ap-pop__card:focus { outline: none; }
+  .ap-pop button { font-family: var(--font-body-family); }
+  @keyframes apPopIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  @media (min-width: 750px) { .ap-pop__card { grid-template-columns: 1fr 1fr; } }
+  .ap-pop__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; max-height: 26rem; }
+  @media (min-width: 750px) { .ap-pop__media img { max-height: none; min-height: 46rem; } }
+  .ap-pop__body { padding: 4rem 3.2rem 3.2rem; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+  .ap-pop__body form, .ap-pop__step { display: flex; flex-direction: column; }
+  .ap-pop__step[hidden] { display: none; }
+  .ap-pop__step--done { animation: apPopIn .45s ease; }
+  .ap-pop__close { position: absolute; top: 1.2rem; right: 1.2rem; z-index: 2; width: 4rem; height: 4rem; border: 0; border-radius: 50%; background: rgba(247,243,236,.85); cursor: pointer; display: grid; place-items: center; }
+  .ap-pop__close svg { width: 1.8rem; height: 1.8rem; stroke: #2b2420; stroke-width: 1.4; fill: none; }
+  .ap-pop__eyebrow { margin: 0 0 1rem; text-transform: uppercase; letter-spacing: .34em; font-size: 1.05rem; color: rgb(184,154,94); }
+  .ap-pop__title { margin: 0; font-family: var(--font-heading-family); font-weight: 300; font-size: clamp(3rem, 4vw, 4rem); line-height: 1.1; }
+  .ap-pop__text { margin: 1.2rem 0 2.2rem; font-size: 1.45rem; opacity: .85; }
+  .ap-pop__input { -webkit-appearance: none; appearance: none; border: 0; border-radius: 0; box-shadow: none; border-bottom: 1px solid rgba(var(--color-foreground), .5); background: transparent; color: inherit; font: inherit; font-size: 1.5rem; padding: 1.2rem 0; text-align: center; }
+  .ap-pop__input:focus, .ap-pop__input:focus-visible { outline: none; box-shadow: none; border-bottom: 2px solid rgb(var(--color-foreground)); }
+  .ap-pop__cta { margin-top: 1.8rem; min-height: 5rem; border: 0; cursor: pointer; background: rgb(var(--color-button)); color: rgb(var(--color-button-text)); text-transform: uppercase; letter-spacing: .24em; font-size: 1.15rem; }
+  .ap-pop__no { margin-top: 1.4rem; border: 0; background: none; cursor: pointer; color: inherit; opacity: .6; font-size: 1.2rem; letter-spacing: .1em; text-transform: uppercase; }
+  .ap-pop__consent { margin: 1.4rem 0 0; font-size: 1.1rem; opacity: .6; }
+  .ap-pop__consent a { color: inherit; }
+  .ap-pop__error { font-size: 1.2rem; color: #b3261e; margin: 1rem 0 0; }
+  .ap-pop__note { margin: 1.4rem 0 0; font-size: 1.25rem; line-height: 1.5; opacity: .75; }
+  .ap-pop__code { display: flex; align-items: stretch; justify-content: center; border: 1px dashed rgba(184,154,94,.9); }
+  .ap-pop__code span { flex: 1; padding: 1.4rem; font-size: 2rem; letter-spacing: .3em; font-weight: 500; }
+  .ap-pop__code button { border: 0; border-left: 1px dashed rgba(184,154,94,.9); background: transparent; color: inherit; cursor: pointer; padding: 0 1.8rem; text-transform: uppercase; letter-spacing: .18em; font-size: 1.1rem; }
+</style>
+
+<script>
+  (function () {
+    var pop = document.getElementById('ApPop-{{ section.id }}');
+    if (!pop) return;
+    var KEY = '{% if ap_hw %}ap-halloween-closed{% else %}ap-welkom-closed{% endif %}', DONE = '{% if ap_hw %}ap-halloween-joined{% else %}ap-welkom-joined{% endif %}';
+    var days = parseInt(pop.dataset.days, 10) || 14;
+    var design = window.Shopify && Shopify.designMode;
+    var stepForm = pop.querySelector('[data-ap-step="form"]');
+    var stepDone = pop.querySelector('[data-ap-step="done"]');
+    var hasErrors = stepForm && stepForm.hasAttribute('data-ap-errors');
+    var lastFocus = null;
+    function apConfetti() {
+      try {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var c = document.createElement('canvas');
+        c.setAttribute('aria-hidden', 'true');
+        c.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:400';
+        document.body.appendChild(c);
+        var ctx = c.getContext('2d'), dpr = window.devicePixelRatio || 1, W, H;
+        function size() { W = c.width = window.innerWidth * dpr; H = c.height = window.innerHeight * dpr; }
+        size(); window.addEventListener('resize', size);
+        var colors = ['#b89a5e', '#e9c46a', '#f4a6b8', '#2b2420', '#ffffff', '#e76f51', '#8ecae6'];
+        var parts = [];
+        function burst(x, n) {
+          for (var i = 0; i < n; i++) {
+            var a = (-Math.PI / 2) + (Math.random() - 0.5) * 1.6, s = (6 + Math.random() * 10) * dpr;
+            parts.push({ x: x, y: H * 0.95, vx: Math.cos(a) * s, vy: Math.sin(a) * s * 1.4, w: (6 + Math.random() * 6) * dpr, h: (3 + Math.random() * 5) * dpr,
+              r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3, col: colors[(Math.random() * colors.length) | 0] });
+          }
+        }
+        burst(W * 0.2, 90); burst(W * 0.8, 90);
+        setTimeout(function () { burst(W * 0.5, 120); }, 350);
+        var start = performance.now();
+        (function tick(t) {
+          ctx.clearRect(0, 0, W, H);
+          for (var i = 0; i < parts.length; i++) {
+            var p = parts[i];
+            p.vy += 0.25 * dpr; p.vx *= 0.99; p.vy *= 0.99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+            ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.col; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
+          }
+          if (t - start < 4200) { requestAnimationFrame(tick); } else { window.removeEventListener('resize', size); c.remove(); }
+        })(start);
+      } catch (e) {}
+    }
+    function showDone() {
+      if (stepForm) stepForm.hidden = true;
+      if (stepDone) { stepDone.hidden = false; pop.setAttribute('aria-labelledby', 'ApPopDone-{{ section.id }}'); }
+    }
+    function open() {
+      lastFocus = document.activeElement;
+      pop.hidden = false; document.body.style.overflow = 'hidden';
+      var f = pop.querySelector('.ap-pop__card'); if (f) f.focus();
+    }
+    function close(remember) {
+      pop.hidden = true; document.body.style.overflow = '';
+      if (remember && !design) { try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {} }
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function recentlyClosed() {
+      try { var t = parseInt(localStorage.getItem(KEY), 10); return (t && Date.now() - t < days * 864e5) || localStorage.getItem(DONE); } catch (e) { return false; }
+    }
+    pop.querySelectorAll('[data-ap-pop-close]').forEach(function (el) { el.addEventListener('click', function () { close(true); }); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) close(true); });
+    var copy = pop.querySelector('[data-ap-copy]');
+    if (copy) copy.addEventListener('click', function () {
+      var code = pop.querySelector('[data-ap-code]').textContent.trim();
+      if (navigator.clipboard) navigator.clipboard.writeText(code);
+      copy.textContent = 'Copiado';
+      setTimeout(function () { copy.textContent = 'Copiar'; }, 2500);
+    });
+    if (design) {
+      document.addEventListener('shopify:section:select', function (e) { if (e.target.contains(pop)) open(); });
+      document.addEventListener('shopify:section:deselect', function (e) { if (e.target.contains(pop)) close(false); });
+      return;
+    }
+    var q = location.search;
+    if (!hasErrors && (q.indexOf('welkom=1') > -1 || q.indexOf('customer_posted=true') > -1)) {
+      try { localStorage.setItem(DONE, '1'); } catch (e) {}
+      showDone(); open(); setTimeout(apConfetti, 250);
+      try {
+        var u = new URL(location.href);
+        u.searchParams.delete('welkom'); u.searchParams.delete('customer_posted');
+        history.replaceState(null, '', u.pathname + u.search + u.hash);
+      } catch (e) {}
+      return;
+    }
+    if (hasErrors) { open(); return; }
+    if (pop.dataset.enabled !== 'true' || recentlyClosed()) return;
+    setTimeout(open, (parseInt(pop.dataset.delay, 10) || 8) * 1000);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "AP welkomst-popup",
+  "tag": "div",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable", "label": "Popup aan", "default": true },
+    { "type": "range", "id": "delay", "min": 3, "max": 30, "step": 1, "unit": "s", "label": "Tonen na", "default": 8 },
+    { "type": "range", "id": "dismiss_days", "min": 1, "max": 30, "step": 1, "unit": "d", "label": "Niet opnieuw tonen na sluiten (dagen)", "default": 14 },
+    { "type": "image_picker", "id": "image", "label": "Afbeelding" },
+    { "type": "text", "id": "eyebrow", "label": "Klein kopje", "default": "Bienvenida" },
+    { "type": "text", "id": "heading", "label": "Kop", "default": "10% de descuento en tu primer pedido" },
+    { "type": "text", "id": "text", "label": "Tekst", "default": "Suscríbete y entérate antes que nadie de nuestras novedades y ofertas." },
+    { "type": "text", "id": "button_label", "label": "Knoptekst", "default": "Quiero mi código" },
+    { "type": "text", "id": "success_eyebrow", "label": "Klein kopje na aanmelden", "default": "Ya eres de las nuestras" },
+    { "type": "text", "id": "success_heading", "label": "Kop na aanmelden", "default": "¡Gracias por unirte!" },
+    { "type": "text", "id": "success_text", "label": "Tekst na aanmelden", "default": "Aquí tienes tu código de 10% de descuento. Introdúcelo al finalizar la compra:" },
+    { "type": "text", "id": "code", "label": "Kortingscode", "default": "BIENVENIDA10" },
+    { "type": "text", "id": "success_note", "label": "Extra regel na aanmelden", "default": "También te lo enviamos por correo electrónico." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Kleurenschema", "default": "scheme-1" }
+  ],
+  "presets": [ { "name": "AP welkomst-popup" } ]
+}
+{% endschema %}
