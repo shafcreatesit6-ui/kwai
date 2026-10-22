@@ -17,3 +17,10 @@ Blijvend:
 
 Foto's: aljarah-padel-manga-larga-blanco-smash-desktop.jpg (2000x1250) en -mobile.jpg (1000x1250, 4:5), muiscursor
 uit de screenshot weggewerkt.
+
+## 19.1: code automatisch toepassen
+- Klik op de lopende balk -> /discount/HALLOWEEN25?redirect=/collections/all: code staat direct in de winkelwagen.
+- Popup: na aanmelden haalt het script /discount/HALLOWEEN25 op, zodat de code al in de winkelwagen staat.
+- Productpagina (bundle_offer-blok): zwarte regel "Halloween: X € con el código HALLOWEEN25" met link
+  "Aplicar código"; X = prijs - floor(prijs*25/100) (zelfde afronding als Shopify) en werkt mee bij variantwissel.
+Getest: alle 18 actieve producten krijgen 25% (draftOrderCalculate); winkelwagen toont "HALLOWEEN25 (-x €)".

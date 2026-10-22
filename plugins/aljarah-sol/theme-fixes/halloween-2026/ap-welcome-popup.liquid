@@ -16,7 +16,7 @@
     assign ap_pop_s_heading = '¡Aquí tienes tu código!'
     assign ap_pop_s_text = 'Introdúcelo al finalizar la compra y ahorra un 25% en todo:'
     assign ap_pop_code = 'HALLOWEEN25'
-    assign ap_pop_note = 'Válido hasta el 1 de noviembre a las 23:59. Un uso por cliente.'
+    assign ap_pop_note = 'Ya lo hemos aplicado a tu carrito. Válido hasta el 1 de noviembre a las 23:59, un uso por cliente.'
     assign ap_pop_tags = 'newsletter,halloween'
   else
     assign ap_hw = false
@@ -207,6 +207,10 @@
     if (!hasErrors && (q.indexOf('welkom=1') > -1 || q.indexOf('customer_posted=true') > -1)) {
       try { localStorage.setItem(DONE, '1'); } catch (e) {}
       showDone(); open(); setTimeout(apConfetti, 250);
+      {%- if ap_hw %}
+      // Halloween: code direct in de winkelwagen, zodat de korting al in de cart zichtbaar is
+      try { fetch('{{ routes.root_url }}discount/{{ ap_pop_code | url_encode }}', { credentials: 'same-origin' }); } catch (e) {}
+      {%- endif %}
       try {
         var u = new URL(location.href);
         u.searchParams.delete('welkom'); u.searchParams.delete('customer_posted');

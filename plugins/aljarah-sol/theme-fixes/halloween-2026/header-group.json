@@ -116,7 +116,7 @@
         "enable": true,
         "end_ts": "1793573999",
         "label": "Promoción de Halloween",
-        "link": "shopify://collections/all",
+        "link": "/discount/HALLOWEEN25?redirect=/collections/all",
         "separator": "🎃",
         "speed": 36,
         "bg": "#14100d",
