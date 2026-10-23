@@ -1,0 +1,278 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "usp_strip": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"ap-strip quick-add-hidden\"><span>{{ 'products.product.free_shipping_from' | t }}</span><i aria-hidden=\"true\"></i><span>Devolución 14 días</span></div>\n<style>\n  .ap-strip { display: flex; justify-content: center; align-items: center; gap: 1.2rem; padding: 1rem 1.2rem; background: rgb(43,36,32); color: #f7f3ec; font-size: 1.05rem; letter-spacing: .18em; text-transform: uppercase; line-height: 1.4; text-align: center; white-space: nowrap; }\n  .ap-strip i { flex: none; width: 4px; height: 4px; border-radius: 50%; background: rgb(184,154,94); }\n  @media screen and (max-width: 749px) { .ap-strip { margin-left: -1.5rem; margin-right: -1.5rem; font-size: 1rem; letter-spacing: .14em; gap: 1rem; } }\n</style>\n"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {},
+          "disabled": true
+        },
+        "jm_stars": {
+          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "bundle_offer": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- assign ap_hw_now = 'now' | date: '%s' | plus: 0 -%}\n{%- if ap_hw_now < 1793573999 -%}\n  {%- assign ap_hw_v = product.selected_or_first_available_variant -%}\n  {%- assign ap_hw_off = ap_hw_v.price | times: 25 | divided_by: 100 -%}\n  <a class=\"ap-hw\" href=\"/discount/HALLOWEEN25?redirect={{ request.path | url_encode }}\" data-ap-hw>\n    <span aria-hidden=\"true\">🎃</span>\n    <span>Halloween: <strong data-ap-hw-price>{{ ap_hw_v.price | minus: ap_hw_off | money }}</strong> con el código <strong>HALLOWEEN25</strong> · hasta el 1/11. <u>Aplicar código</u></span>\n  </a>\n  <style>\n    .ap-hw { display: flex; gap: .8rem; align-items: flex-start; margin: .2rem 0 .8rem; padding: 1rem 1.4rem; background: #14100d; color: #f7f3ec; font-size: 1.35rem; line-height: 1.45; text-decoration: none; }\n    .ap-hw strong { color: #f28c28; font-weight: 600; }\n    .ap-hw u { text-underline-offset: .3rem; opacity: .85; }\n  </style>\n  <script>\n    (function () {\n      // pubsub.js laadt met defer: pas na DOMContentLoaded abonneren\n      function init() {\n        if (window.apHwReady || typeof subscribe !== 'function' || typeof PUB_SUB_EVENTS === 'undefined') return;\n        window.apHwReady = true;\n        var fmt = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });\n        subscribe(PUB_SUB_EVENTS.variantChange, function (event) {\n          var v = event && event.data && event.data.variant;\n          if (!v) return;\n          var off = Math.floor(v.price * 25 / 100);\n          document.querySelectorAll('[data-ap-hw-price]').forEach(function (el) { el.textContent = fmt.format((v.price - off) / 100); });\n        });\n      }\n      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();\n    })();\n  </script>\n{%- endif -%}\n{%- if product.handle == 'conjunto-padel-top-nadador-falda' -%}\n<p class=\"ap-bundle\"><span aria-hidden=\"true\">🎁</span><span><strong>Llévate 2 o más</strong> y ahorra un 25% en el 2º conjunto. También combinando caqui y blanco lavanda. Se aplica automáticamente en el carrito.</span></p>\n{%- else -%}\n<p class=\"ap-bundle\"><span aria-hidden=\"true\">🎁</span><span><strong>Llévate 2 o más</strong> y ahorra un 10% en todo. Se aplica automáticamente en el carrito.</span></p>\n{%- endif -%}\n<style>\n  .ap-bundle { display: flex; gap: .8rem; align-items: flex-start; margin: .2rem 0 0; padding: 1rem 1.4rem; background: rgba(184,154,94,.12); border: 1px solid rgba(184,154,94,.45); font-size: 1.35rem; line-height: 1.45; }\n</style>\n"
+          }
+        },
+        "usp_list": {
+          "type": "custom_liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<ul class=\"bs-usp\"><li><img src=\"{{ 'bs-usp-box.png' | asset_url }}\" alt=\"\" width=\"20\" height=\"20\" loading=\"lazy\"><span><strong>Envío gratis</strong> desde 35 € a España</span></li><li><img src=\"{{ 'bs-usp-truck.svg' | asset_url }}\" alt=\"\" width=\"20\" height=\"20\" loading=\"lazy\"><span><strong>Envío con seguimiento</strong> por correo electrónico</span></li><li><img src=\"{{ 'bs-usp-return.svg' | asset_url }}\" alt=\"\" width=\"20\" height=\"20\" loading=\"lazy\"><span><strong>14 días</strong> para desistir</span></li></ul>"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "size_guide": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- assign ap_sg_parts = product.description | split: '<table' -%}\n{%- if ap_sg_parts.size > 1 -%}\n  {%- assign ap_sg_table = ap_sg_parts[1] | split: '</table>' | first | prepend: '<table' | append: '</table>' -%}\n  {%- assign ap_sg_context = '' -%}\n  {%- assign ap_sg_sections = product.description | split: '<h3>Guía de tallas</h3>' -%}\n  {%- if ap_sg_sections.size > 1 -%}\n    {%- assign ap_sg_context = ap_sg_sections[1] | split: '<table' | first -%}\n  {%- endif -%}\n  <div class=\"ap-sg-link\">\n    <button type=\"button\" class=\"ap-sg-link__btn\" data-ap-sg-open aria-haspopup=\"dialog\">\n      <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M3 15.5 15.5 3 21 8.5 8.5 21z\"/><path d=\"M7 11.5l1.8 1.8M9.8 8.7l1.2 1.2M12.6 5.9l1.8 1.8M10.4 14.1l1.2 1.2\"/></svg>\n      {{ 'products.size_guide.title' | t }}\n    </button>\n    <span class=\"ap-sg-link__tip\">{{ 'products.size_guide.tip' | t }}</span>\n  </div>\n  <dialog class=\"ap-sg\" data-ap-sg aria-labelledby=\"ApSgTitle-{{ product.id }}\">\n    <div class=\"ap-sg__head\">\n      <p class=\"ap-sg__title\" id=\"ApSgTitle-{{ product.id }}\">{{ 'products.size_guide.title' | t }}</p>\n      <button type=\"button\" class=\"ap-sg__close\" data-ap-sg-close aria-label=\"{{ 'accessibility.close' | t | escape }}\">\n        <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6 6l12 12M18 6 6 18\"/></svg>\n      </button>\n    </div>\n    <p class=\"ap-sg__sub\">{{ product.title | escape }} · {% if ap_sg_context contains 'Tabla orientativa' %}{{ 'products.size_guide.approximate' | t }}{% else %}{{ 'products.size_guide.units' | t }}{% endif %}</p>\n    {%- if ap_sg_context != blank -%}\n      <div class=\"ap-sg__note\">{{ ap_sg_context }}</div>\n    {%- endif -%}\n    <div class=\"ap-sg__table\">{{ ap_sg_table }}</div>\n    <p class=\"ap-sg__note\">{{ 'products.size_guide.help_html' | t }}</p>\n  </dialog>\n  <style>\n    .ap-sg-link { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1.2rem; margin: -.6rem 0 .4rem; }\n    .ap-sg-link__btn { display: inline-flex; align-items: center; gap: .6rem; padding: .4rem 0; border: 0; background: none; color: inherit; font: inherit; font-size: 1.35rem; text-decoration: underline; text-underline-offset: .35rem; cursor: pointer; }\n    .ap-sg-link__btn svg { width: 1.8rem; height: 1.8rem; fill: none; stroke: currentColor; stroke-width: 1.3; }\n    .ap-sg-link__tip { font-size: 1.25rem; opacity: .7; }\n    .ap-sg { position: fixed; inset: 0; margin: auto; height: fit-content; width: min(64rem, calc(100% - 3.2rem)); max-height: 85vh; overflow: auto; padding: 2.4rem; border: 0; background: rgb(var(--color-background)); color: rgb(var(--color-foreground)); box-shadow: 0 2rem 6rem rgba(0,0,0,.25); }\n    .ap-sg::backdrop { background: rgba(31,26,22,.55); }\n    .ap-sg__head { display: flex; justify-content: space-between; align-items: center; }\n    .ap-sg__title { margin: 0; font-family: var(--font-heading-family); font-size: 2.6rem; font-weight: 300; }\n    .ap-sg__close { width: 4rem; height: 4rem; border: 0; background: none; cursor: pointer; color: inherit; display: grid; place-items: center; }\n    .ap-sg__close svg { width: 1.8rem; height: 1.8rem; stroke: currentColor; stroke-width: 1.4; fill: none; }\n    .ap-sg__sub { margin: .4rem 0 1.6rem; font-size: 1.3rem; opacity: .7; }\n    .ap-sg__table { overflow-x: auto; }\n    .ap-sg__table table { width: 100%; border-collapse: collapse; font-size: 1.35rem; text-align: center; }\n    .ap-sg__table th, .ap-sg__table td { padding: .9rem .8rem; border-bottom: 1px solid rgba(var(--color-foreground), .12); }\n    .ap-sg__table th { font-weight: 500; background: rgba(184,154,94,.12); }\n    .ap-sg__note { margin: 1.6rem 0 0; font-size: 1.3rem; line-height: 1.5; opacity: .85; }\n  </style>\n  <script>\n    (function () {\n      if (window.apSgReady) return;\n      window.apSgReady = true;\n      document.addEventListener('click', function (e) {\n        var dlg = document.querySelector('[data-ap-sg]');\n        if (!dlg) return;\n        if (e.target.closest('[data-ap-sg-open]')) {\n          if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');\n        } else if (e.target.closest('[data-ap-sg-close]') || e.target === dlg) {\n          if (dlg.close) dlg.close(); else dlg.removeAttribute('open');\n        }\n      });\n    })();\n  </script>\n{%- endif -%}\n"
+          }
+        },
+        "delivery_eta": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"ap-eta\" data-ap-eta hidden>\n  <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M3 7h11v9H3zM14 10h4l3 3v3h-7z\"/><circle cx=\"7\" cy=\"17.5\" r=\"1.6\"/><circle cx=\"17\" cy=\"17.5\" r=\"1.6\"/></svg>\n  <span>Entrega estimada entre el <strong data-eta-min></strong> y el <strong data-eta-max></strong></span>\n</div>\n<style>\n  .ap-eta { display: flex; gap: 1rem; align-items: center; margin: .2rem 0 .4rem; font-size: 1.4rem; }\n  .ap-eta[hidden] { display: none; }\n  .ap-eta svg { width: 2.2rem; height: 2.2rem; flex: none; fill: none; stroke: currentColor; stroke-width: 1.4; }\n</style>\n<script>\n  (function () {\n    // Plazo: 1–3 días laborables de preparación + 6–12 de entrega = 7–15 días laborables (hora de España).\n    function run() {\n      var els = document.querySelectorAll('[data-ap-eta]');\n      if (!els.length) return;\n      var holidays = ['01-01', '01-06', '05-01', '08-15', '10-12', '11-01', '12-06', '12-08', '12-25'];\n      var now;\n      try { now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' })); } catch (e) { now = new Date(); }\n      function pad(n) { return (n < 10 ? '0' : '') + n; }\n      function isWorkday(d) {\n        var w = d.getDay();\n        return w !== 0 && w !== 6 && holidays.indexOf(pad(d.getMonth() + 1) + '-' + pad(d.getDate())) < 0;\n      }\n      function addWorkdays(d, n) {\n        var x = new Date(d.getTime());\n        while (n > 0) { x.setDate(x.getDate() + 1); if (isWorkday(x)) n--; }\n        return x;\n      }\n      var fmt = new Intl.DateTimeFormat('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });\n      var from = fmt.format(addWorkdays(now, 7)).replace(/\\./g, '');\n      var to = fmt.format(addWorkdays(now, 15)).replace(/\\./g, '');\n      els.forEach(function (el) {\n        el.querySelector('[data-eta-min]').textContent = from;\n        el.querySelector('[data-eta-max]').textContent = to;\n        el.hidden = false;\n      });\n    }\n    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();\n  })();\n</script>\n"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": false
+          }
+        },
+        "payment_icons": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<ul class=\"ap-pay\" role=\"list\" aria-label=\"Métodos de pago\">{%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>{%- endfor -%}</ul>"
+          }
+        },
+        "description": {
+          "type": "description",
+          "disabled": true,
+          "settings": {}
+        },
+        "desc_smart": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- assign ap_d_parts = product.description | split: '<h3>' -%}\n<div class=\"product__description rte quick-add-hidden\">{{ ap_d_parts[0] }}</div>\n{%- for ap_d_part in ap_d_parts offset: 1 -%}\n  {%- assign ap_d_title = ap_d_part | split: '</h3>' | first | strip_html | strip -%}\n  {%- if ap_d_title contains 'Envío' -%}{%- continue -%}{%- endif -%}\n  {%- assign ap_d_icon = 'icon-washing.svg' -%}\n  {%- if ap_d_title contains 'talla' -%}{%- assign ap_d_icon = 'icon-ruler.svg' -%}{%- endif -%}\n  <div class=\"product__accordion accordion quick-add-hidden\">\n    <details>\n      <summary>\n        <div class=\"summary__title\">\n          <span class=\"svg-wrapper\">{{ ap_d_icon | inline_asset_content }}</span>\n          <h2 class=\"h4 accordion__title\">{{ ap_d_title }}</h2>\n        </div>\n        {{- 'icon-caret.svg' | inline_asset_content -}}\n      </summary>\n      <div class=\"accordion__content rte\">{{ ap_d_part | split: '</h3>' | last }}</div>\n    </details>\n  </div>\n{%- endfor -%}\n"
+          }
+        },
+        "tab_shipping": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Envío",
+            "icon": "truck",
+            "content": "<p>El plazo estimado total es de 7–15 días laborables: 1–3 días de preparación y 6–12 días de transporte después del envío. Es una estimación, no una fecha garantizada. Te enviamos el seguimiento por correo. Envío a España peninsular y Baleares: 4,95 €, gratis desde 35 €. Consulta la <a href=\"/policies/shipping-policy\">política de envío</a> para conocer todas las condiciones. IVA y aranceles incluidos: no pagas nada al recibir tu pedido. Sigue tu paquete en <a href=\"/pages/seguir-mi-pedido\">Seguir mi pedido</a>.</p>",
+            "page": ""
+          }
+        },
+        "tab_returns": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Devoluciones",
+            "icon": "return",
+            "content": "<p>Tienes 14 días naturales desde la recepción para comunicar tu desistimiento a devoluciones@aljarahsol.com o mediante el formulario al final de la web. Las devoluciones se envían a Países Bajos y sus gastos corren de tu cuenta, salvo productos dañados o equivocados. Consulta la <a href=\"/policies/refund-policy\">política de devoluciones</a> para ver la dirección, las condiciones y el formulario.</p>",
+            "page": ""
+          }
+        },
+        "sticky_atc": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- assign ap_opts = product.options | join: '|' | downcase -%}\n<div class=\"ap-sticky-atc quick-add-hidden\" data-ap-sticky-atc data-has-size=\"{% if ap_opts contains 'talla' or ap_opts contains 'size' %}1{% else %}0{% endif %}\">\n  <div class=\"ap-sticky-atc__info\">\n    <span class=\"ap-sticky-atc__price\" data-ap-sa-price>{{ product.selected_or_first_available_variant.price | money }}</span>\n    <span class=\"ap-sticky-atc__variant\" data-ap-sa-variant>{{ product.title | escape }}</span>\n  </div>\n  <button type=\"button\" class=\"ap-sticky-atc__btn\" data-ap-sa-btn>Elegir talla</button>\n</div>\n<style>\n  .ap-sticky-atc { display: none; }\n  @media screen and (max-width: 749px) {\n    body.ap-sticky-page { padding-bottom: calc(7.2rem + env(safe-area-inset-bottom, 0px)); }\n    body > .ap-sticky-atc { position: fixed; left: 0; right: 0; bottom: 0; z-index: 80; display: flex; align-items: center; gap: 1.2rem; padding: 1rem 1.5rem calc(1rem + env(safe-area-inset-bottom, 0px)); background: rgb(247,243,236); border-top: 1px solid rgba(184,154,94,.4); box-shadow: 0 -.6rem 2rem rgba(43,36,32,.08); transform: translateY(120%); transition: transform .35s cubic-bezier(.2,.8,.2,1); }\n    body > .ap-sticky-atc.is-on { transform: none; }\n    body[class*='overflow-hidden'] > .ap-sticky-atc { transform: translateY(120%); }\n    body.ap-sticky-on .aj-home-button { bottom: calc(8.6rem + env(safe-area-inset-bottom, 0px)); }\n  }\n  .ap-sticky-atc__info { display: flex; flex-direction: column; flex: 1; min-width: 0; line-height: 1.35; }\n  .ap-sticky-atc__price { font-size: 1.6rem; color: rgb(43,36,32); letter-spacing: .04em; }\n  .ap-sticky-atc__variant { font-size: 1.15rem; color: rgba(43,36,32,.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n  .ap-sticky-atc__btn { flex: 0 0 auto; min-height: 4.8rem; padding: 0 2.2rem; border: 0; background: rgb(43,36,32); color: #fff; font-family: var(--font-body-family); font-size: 1.15rem; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }\n  .ap-sticky-atc__btn[disabled] { opacity: .5; cursor: not-allowed; }\n  .ap-pick-flash { animation: apPickFlash 1.4s ease; }\n  @keyframes apPickFlash { 0%, 100% { box-shadow: 0 0 0 0 rgba(184,154,94,0); } 30% { box-shadow: 0 0 0 .6rem rgba(184,154,94,.35); } }\n</style>\n<script src=\"{{ 'ap-sticky-atc.js' | asset_url }}\" defer=\"defer\"></script>\n"
+          }
+        },
+        "feature_chips": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- assign ap_chips = product.metafields.custom.ap_chips.value -%}\n{%- if ap_chips != blank -%}\n<ul class=\"ap-chips quick-add-hidden\" role=\"list\">{%- for ap_c in ap_chips -%}<li>{{ ap_c | escape }}</li>{%- endfor -%}</ul>\n<style>\n  .ap-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin: .2rem 0 .6rem; padding: 0; list-style: none; }\n  .ap-chips li { display: flex; align-items: center; justify-content: center; min-height: 3.6rem; padding: .5rem .8rem; border: 1px solid rgba(184,154,94,.55); background: rgba(184,154,94,.06); font-size: 1.2rem; letter-spacing: .08em; text-transform: uppercase; text-align: center; line-height: 1.3; }\n  @media screen and (min-width: 990px) { .ap-chips { grid-template-columns: repeat(4, minmax(0, 1fr)); } .ap-chips li { font-size: 1.1rem; } }\n</style>\n{%- endif -%}\n"
+          }
+        },
+        "fit_tip": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- assign ap_fit = product.metafields.custom.ap_ajuste.value -%}\n{%- if ap_fit != blank -%}\n  {%- assign ap_fit_pos = ap_fit | minus: 1 | times: 23 | plus: 4 -%}\n  <div class=\"ap-fit quick-add-hidden\">\n    <span class=\"ap-fit__label\">Ajuste</span>\n    <div class=\"ap-fit__track\" role=\"img\" aria-label=\"Ajuste: {% if ap_fit <= 2 %}ceñido{% elsif ap_fit == 3 %}normal{% else %}holgado{% endif %}\"><span class=\"ap-fit__dot\" style=\"left: {{ ap_fit_pos }}%\"></span></div>\n    <div class=\"ap-fit__scale\" aria-hidden=\"true\"><span>Ceñido</span><span>Normal</span><span>Holgado</span></div>\n    {%- if product.metafields.custom.ap_ajuste_tip != blank -%}\n      <p class=\"ap-fit__tip\">{{ product.metafields.custom.ap_ajuste_tip.value | escape }}</p>\n    {%- endif -%}\n  </div>\n  <style>\n    .ap-fit { display: grid; grid-template-columns: 6.4rem 1fr; align-items: center; row-gap: .5rem; margin: .2rem 0 .6rem; }\n    .ap-fit__label { font-size: 1.3rem; }\n    .ap-fit__track { position: relative; height: 2px; background: rgba(43,36,32,.18); }\n    .ap-fit__dot { position: absolute; top: 50%; width: 1.3rem; height: 1.3rem; border-radius: 50%; background: rgb(43,36,32); transform: translate(-50%, -50%); }\n    .ap-fit__scale { grid-column: 2; display: flex; justify-content: space-between; font-size: 1.15rem; opacity: .65; }\n    .ap-fit__tip { grid-column: 1 / -1; margin: .2rem 0 0; font-size: 1.3rem; font-weight: 500; }\n  </style>\n{%- endif -%}\n"
+          }
+        },
+        "title_split": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- assign ap_t_name = product.title | split: ' – ' | first -%}\n{%- assign ap_t_sub = product.title | remove_first: ap_t_name | remove_first: ' – ' | strip -%}\n<div class=\"product__title ap-title\">\n  <h1>{{ ap_t_name | escape }}{%- if ap_t_sub != blank -%}<span class=\"ap-title__sub\">{{ ap_t_sub | escape }}</span>{%- endif -%}</h1>\n  <a href=\"{{ product.url }}\" class=\"product__title\">\n    <h2 class=\"h1\">{{ product.title | escape }}</h2>\n  </a>\n</div>\n<style>\n  .ap-title h1 { margin-bottom: 0; }\n  .ap-title__sub { display: block; margin-top: .8rem; font-family: var(--font-body-family); font-size: 1.5rem; font-weight: 400; letter-spacing: .06em; line-height: 1.45; opacity: .75; }\n  .ap-title__sub::first-letter { text-transform: uppercase; }\n</style>\n"
+          }
+        },
+        "duties_line": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"ap-duties quick-add-hidden\">\n  <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6z\"/><path d=\"M8.5 12l2.4 2.4 4.6-4.8\"/></svg>\n  <span><strong>Impuestos y aduanas incluidos.</strong> No pagas nada al recibir tu pedido.</span>\n</div>\n<style>\n  .ap-duties { display: flex; gap: 1rem; align-items: center; margin: 0 0 .6rem; font-size: 1.4rem; line-height: 1.45; }\n  .ap-duties svg { width: 2.2rem; height: 2.2rem; flex: none; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; }\n</style>\n"
+          }
+        }
+      },
+      "block_order": [
+        "usp_strip",
+        "title",
+        "title_split",
+        "jm_stars",
+        "price",
+        "feature_chips",
+        "bundle_offer",
+        "usp_list",
+        "variant_picker",
+        "size_guide",
+        "fit_tip",
+        "delivery_eta",
+        "duties_line",
+        "buy_buttons",
+        "payment_icons",
+        "description",
+        "desc_smart",
+        "tab_shipping",
+        "tab_returns",
+        "sticky_atc"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "thumbnail",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 20,
+        "padding_bottom": 36
+      }
+    },
+    "reviews": {
+      "type": "apps",
+      "blocks": {
+        "jm_widget": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "jm_widget"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "heading": "También te puede gustar",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    },
+    "usp_grid": {
+      "type": "bs-usp-grid",
+      "blocks": {
+        "usp_1": {
+          "type": "item",
+          "settings": {
+            "icon": "support",
+            "title": "Atención personal",
+            "text": "<p>Escríbenos a hola@aljarahsol.com. Lunes a viernes, de 10:00 a 18:00: respondemos en menos de 24 h.</p>"
+          }
+        },
+        "usp_2": {
+          "type": "item",
+          "settings": {
+            "icon": "delivery",
+            "title": "Envío con seguimiento",
+            "text": "<p>Sigue tu paquete hasta la puerta de tu casa en <a href=\"/pages/seguir-mi-pedido\">Seguir mi pedido</a>.</p>"
+          }
+        },
+        "usp_3": {
+          "type": "item",
+          "settings": {
+            "icon": "returns",
+            "title": "14 días para desistir",
+            "text": "<p>14 días naturales desde que recibes tu pedido.</p>"
+          }
+        },
+        "usp_4": {
+          "type": "item",
+          "settings": {
+            "icon": "payment",
+            "title": "Pago seguro",
+            "text": "<p>Pagas en un checkout seguro. Verás todos los métodos de pago al finalizar la compra.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "usp_1",
+        "usp_2",
+        "usp_3",
+        "usp_4"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "manga_banner": {
+      "type": "ap-landscape-banner",
+      "settings": {
+        "image": "shopify://shop_images/aljarah-padel-manga-larga-blanco-smash-desktop.jpg",
+        "image_mobile": "shopify://shop_images/aljarah-padel-manga-larga-blanco-smash-mobile.jpg",
+        "focal": "object-position: 50% 25%",
+        "only_handle": "conjunto-padel-manga-larga",
+        "eyebrow": "Aljarah · Pádel",
+        "heading": "Hecha para ganar",
+        "text": "Manga larga que te sigue en cada golpe y falda con abertura lateral para moverte sin límites."
+      }
+    }
+  },
+  "order": [
+    "main",
+    "manga_banner",
+    "reviews",
+    "related",
+    "usp_grid"
+  ]
+}

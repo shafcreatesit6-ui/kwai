@@ -1,0 +1,709 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "ap-hero-slideshow",
+      "blocks": {
+        "sb": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/aljarah-padel-top-nadador-caqui-laura.jpg",
+            "focal": "object-position: 50% 25%",
+            "eyebrow": "Nuevo · Pádel",
+            "heading": "Tu nuevo look de pádel",
+            "text": "Top nadador + falda de vuelo, en caqui y blanco lavanda",
+            "button_label": "Descubrir",
+            "link": "/products/conjunto-padel-top-nadador-falda?variant=55434652516693"
+          }
+        },
+        "sp": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/aljarah-padel-manga-larga-chocolate-desktop.jpg",
+            "image_mobile": "shopify://shop_images/aljarah-padel-manga-larga-chocolate.jpg",
+            "focal": "object-position: 50% 0%",
+            "eyebrow": "Nuevo · Pádel",
+            "heading": "La pista es tu pasarela",
+            "text": "Top de manga larga + falda con abertura lateral",
+            "button_label": "Descubrir",
+            "link": "/products/conjunto-padel-manga-larga?variant=55240493629781"
+          }
+        },
+        "s5": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/asol-rosa-pesas.jpg",
+            "focal": "object-position: 50% 0%",
+            "eyebrow": "Edición rosa",
+            "heading": "Fuerte y femenina",
+            "text": "Top con cremallera + shorts de secado rápido. Se venden por separado.",
+            "button_label": "Descubrir",
+            "link": "/products/conjunto-deportivo-secado-rapido?variant=55229898948949"
+          }
+        },
+        "sl": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/asol-moka-rodillas.jpg",
+            "focal": "object-position: 50% 0%",
+            "eyebrow": "Leggings",
+            "heading": "Efecto melocotón",
+            "text": "Sin costuras y de cintura alta, para sentirte cómoda todo el día",
+            "button_label": "Descubrir",
+            "link": "shopify://collections/leggings"
+          }
+        },
+        "s1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/aljarah-sol-conjunto-v-5.jpg",
+            "focal": "object-position: 50% 0%",
+            "eyebrow": "Nuevo",
+            "heading": "Tu conjunto para todo",
+            "text": "Top + pantalón a juego, en 6 colores",
+            "button_label": "Descubrir",
+            "link": "shopify://products/conjunto-deportivo-con-escote-en-v"
+          }
+        },
+        "s2": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/asol-conjunto-acampanado-2.jpg",
+            "focal": "object-position: 50% 0%",
+            "eyebrow": "Nuevo",
+            "heading": "Lista para tus planes",
+            "text": "Top de tirantes + pantalón acampanado",
+            "button_label": "Descubrir",
+            "link": "shopify://products/conjunto-top-tirantes-pantalon-acampanado"
+          }
+        }
+      },
+      "block_order": [
+        "sb",
+        "sp",
+        "s5",
+        "sl",
+        "s1",
+        "s2"
+      ],
+      "settings": {
+        "label": "Destacado",
+        "interval": 6,
+        "height": "tall",
+        "text_position": "bottom"
+      },
+      "custom_css": [
+        ".ap-hero__media img {transform-origin: 50% 0;}"
+      ]
+    },
+    "stories": {
+      "type": "ap-stories",
+      "settings": {}
+    },
+    "espalda_ed": {
+      "type": "ap-edit",
+      "blocks": {
+        "e1": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-mono-acampanado-cafe-espalda.png",
+            "product": "mono-acampanado-espalda-abierta-cremallera",
+            "title": "Mono acampanado",
+            "badge": "Nuevo",
+            "link": "/products/mono-acampanado-espalda-abierta-cremallera"
+          }
+        },
+        "e2": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-mono-espalda-cafe.jpg",
+            "product": "mono-corto-espalda-abierta-cremallera",
+            "title": "Mono corto con cremallera",
+            "badge": "3 colores",
+            "link": "/products/mono-corto-espalda-abierta-cremallera"
+          }
+        },
+        "e3": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-mono-largo-espalda-anilla.jpg",
+            "product": "mono-largo-espalda-abierta-escote-v",
+            "title": "Anilla dorada",
+            "badge": "",
+            "link": "/products/mono-largo-espalda-abierta-escote-v"
+          }
+        },
+        "e4": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-mono-negro-espalda-abierta.jpg",
+            "product": "mono-largo-negro-espalda-abierta",
+            "title": "Negro básico",
+            "badge": "",
+            "link": "/products/mono-largo-negro-espalda-abierta"
+          }
+        }
+      },
+      "block_order": [
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "settings": {
+        "caption": "Nueva colección",
+        "heading": "Espalda abierta",
+        "text": "Monos con la espalda al aire, frunce que realza y tejidos que se adaptan a ti. Para entrenar o para salir.",
+        "button_label": "Ver la colección",
+        "button_link": "shopify://collections/espalda-abierta",
+        "style": "cream"
+      }
+    },
+    "coll": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "conjuntos",
+        "products_to_show": 4,
+        "title": "Nuestros conjuntos",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "link",
+        "color_scheme": "scheme-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 56,
+        "padding_bottom": 72
+      }
+    },
+    "padel_ed": {
+      "type": "ap-edit",
+      "blocks": {
+        "p1": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-encaje-top-azul-set.jpg",
+            "product": "conjunto-padel-encaje",
+            "title": "Conjunto de encaje",
+            "badge": "3 colores",
+            "link": ""
+          }
+        },
+        "p2": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-plisado-cafe-movil.jpg",
+            "product": "conjunto-padel-falda-plisada",
+            "title": "Falda plisada con short",
+            "badge": "Nuevo",
+            "link": ""
+          }
+        },
+        "p3": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-manga-blanco.jpg",
+            "product": "conjunto-padel-manga-larga",
+            "title": "Manga larga",
+            "badge": "Otoño",
+            "link": ""
+          }
+        },
+        "p4": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-encaje-top-negro-set.jpg",
+            "product": "conjunto-padel-encaje",
+            "title": "Encaje en negro",
+            "badge": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "caption": "Nuevo · Pádel y tenis",
+        "heading": "La pista es tu pasarela",
+        "text": "Faldas con short interior, tops con sujeción y encaje que enamora. Para jugar cómoda y verte espectacular.",
+        "button_label": "Ver todo pádel",
+        "button_link": "shopify://collections/padel",
+        "style": "dark"
+      }
+    },
+    "lookbook": {
+      "type": "ap-lookbook",
+      "settings": {}
+    },
+    "leggings_ed": {
+      "type": "ap-edit",
+      "blocks": {
+        "l1": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-moka-rodillas.jpg",
+            "product": "leggings-push-up-sin-costuras-moka",
+            "title": "Push-up moka",
+            "badge": "Favorito",
+            "link": ""
+          }
+        },
+        "l2": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-vino-bolso.jpg",
+            "product": "leggings-sin-costuras-rojo-vino",
+            "title": "Rojo vino",
+            "badge": "",
+            "link": ""
+          }
+        },
+        "l3": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-azul-rodillas.jpg",
+            "product": "leggings-push-up-cintura-v-azul-marino",
+            "title": "Cintura en V",
+            "badge": "",
+            "link": ""
+          }
+        },
+        "l4": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/asol-sport-rodilla.jpg",
+            "product": "leggings-deportivos-sin-costuras",
+            "title": "4 colores",
+            "badge": "XS–XL",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "l1",
+        "l2",
+        "l3",
+        "l4"
+      ],
+      "settings": {
+        "caption": "Leggings",
+        "heading": "Leggings que realzan",
+        "text": "Sin costuras, cintura alta y efecto melocotón. Llévate 2 o más y ahorra un 10% en todo.",
+        "button_label": "Ver todos los leggings",
+        "button_link": "shopify://collections/leggings",
+        "style": "light"
+      }
+    },
+    "details": {
+      "type": "ap-details",
+      "settings": {}
+    },
+    "statement": {
+      "type": "rich-text",
+      "blocks": {
+        "cap": {
+          "type": "caption",
+          "settings": {
+            "caption": "Nuestra historia",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "h": {
+          "type": "heading",
+          "settings": {
+            "heading": "Hecha para moverte.",
+            "heading_size": "h0"
+          }
+        },
+        "t": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Conjuntos a juego para entrenar, jugar al pádel, salir o ir cómoda todo el día. Pocas prendas, bien elegidas, para sentirte guapa sin pensar qué combinar.</p>"
+          }
+        },
+        "b": {
+          "type": "button",
+          "settings": {
+            "button_label": "Lee nuestra historia",
+            "button_link": "shopify://pages/nuestra-historia",
+            "button_style_secondary": true,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "cap",
+        "h",
+        "t",
+        "b"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-2",
+        "full_width": true,
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "pearlset": {
+      "type": "image-with-text",
+      "blocks": {
+        "cap": {
+          "type": "caption",
+          "settings": {
+            "caption": "Corto o largo",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "h": {
+          "type": "heading",
+          "settings": {
+            "heading": "Elige tu versión",
+            "heading_size": "h1"
+          }
+        },
+        "t": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pantalón corto para el gimnasio y los días de calor, o largo para yoga, pilates y para ir cómoda todo el día. El mismo top con escote en V, a juego.</p>",
+            "text_style": "body"
+          }
+        },
+        "b": {
+          "type": "button",
+          "settings": {
+            "button_label": "Ver el conjunto",
+            "button_link": "shopify://products/conjunto-deportivo-con-escote-en-v",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "cap",
+        "h",
+        "t",
+        "b"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/aljarah-sol-cj-original-photo-14.jpg",
+        "height": "adapt",
+        "desktop_image_width": "large",
+        "layout": "image_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "center",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      },
+      "disabled": true
+    },
+    "stack": {
+      "type": "image-with-text",
+      "blocks": {
+        "cap": {
+          "type": "caption",
+          "settings": {
+            "caption": "Para tus planes",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "h": {
+          "type": "heading",
+          "settings": {
+            "heading": "Top de tirantes + pantalón acampanado",
+            "heading_size": "h1"
+          }
+        },
+        "t": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Cintura alta, pierna acampanada y espalda al aire con lazo. Para una cena, una terraza o un concierto, en negro, naranja o blanco.</p>",
+            "text_style": "body"
+          }
+        },
+        "b": {
+          "type": "button",
+          "settings": {
+            "button_label": "Ver el conjunto",
+            "button_link": "shopify://products/conjunto-top-tirantes-pantalon-acampanado",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "cap",
+        "h",
+        "t",
+        "b"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/asol-conjunto-acampanado-1.jpg",
+        "height": "adapt",
+        "desktop_image_width": "large",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "center",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "yoga": {
+      "type": "image-with-text",
+      "blocks": {
+        "cap": {
+          "type": "caption",
+          "settings": {
+            "caption": "Secado rápido",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "h": {
+          "type": "heading",
+          "settings": {
+            "heading": "Combina tus piezas",
+            "heading_size": "h1"
+          }
+        },
+        "t": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Elige tu top (deportivo, con cremallera o de manga larga) y combínalo con leggings o shorts. Tejido acanalado, elástico y de secado rápido, en 6 colores. Las piezas se venden por separado.</p>",
+            "text_style": "body"
+          }
+        },
+        "b": {
+          "type": "button",
+          "settings": {
+            "button_label": "Crear mi conjunto",
+            "button_link": "shopify://products/conjunto-deportivo-secado-rapido",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "cap",
+        "h",
+        "t",
+        "b"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/asol-yoga-lila-manga-larga.png",
+        "height": "adapt",
+        "desktop_image_width": "large",
+        "layout": "image_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "center",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "brand_story": {
+      "type": "bs-image-text",
+      "settings": {
+        "eyebrow": "Aljarah Sol",
+        "heading": "Cómoda, guapa y lista",
+        "body": "<p>Sin pensar qué combinar: top y pantalón a juego en un solo pedido.</p><p>Envío gratis a España peninsular y Baleares desde 35 €, y 14 días para desistir.</p>",
+        "cta_text": "Ver los conjuntos",
+        "cta_link": "shopify://collections/conjuntos",
+        "image": "shopify://shop_images/aljarah-sol-cj-original-photo-10.jpg",
+        "image_ratio": "portrait",
+        "layout": "image-right",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "usp": {
+      "type": "multicolumn",
+      "blocks": {
+        "u1": {
+          "type": "column",
+          "settings": {
+            "title": "Envío gratis",
+            "text": "<p>En pedidos desde 35 € a España peninsular y Baleares.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "u2": {
+          "type": "column",
+          "settings": {
+            "title": "14 días para desistir",
+            "text": "<p>Tienes 14 días naturales desde que recibes tu pedido. Consulta nuestra política de devoluciones.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "u3": {
+          "type": "column",
+          "settings": {
+            "title": "Envío con seguimiento",
+            "text": "<p>Te enviamos el número de seguimiento por correo para que sigas tu paquete hasta tu puerta.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "u1",
+        "u2",
+        "u3"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h2",
+        "image_width": "third",
+        "image_ratio": "adapt",
+        "button_label": "",
+        "button_link": "",
+        "columns_desktop": 3,
+        "column_alignment": "center",
+        "background_style": "none",
+        "color_scheme": "scheme-1",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "faq": {
+      "type": "collapsible-content",
+      "blocks": {
+        "q1": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "¿Qué talla elijo?",
+            "icon": "none",
+            "row_content": "<p>Consulta nuestra <a href='/pages/guia-de-tallas'>guía de tallas</a> y la tabla de cada producto. ¿Dudas entre dos? Escríbenos a hola@aljarahsol.com y te ayudamos.</p>",
+            "page": ""
+          }
+        },
+        "q2": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "¿Cuánto tarda el envío?",
+            "icon": "none",
+            "row_content": "<p>El plazo estimado total es de 7–15 días laborables: 1–3 días de preparación y, después del envío, 6–12 días de transporte. Es una estimación, no una fecha garantizada. Te enviamos el número de seguimiento por correo.</p>",
+            "page": ""
+          }
+        },
+        "q3": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "¿Cuánto cuesta el envío?",
+            "icon": "none",
+            "row_content": "<p>4,95 € a España peninsular y Baleares, y gratis en pedidos desde 35 €. Verás los gastos de envío en la pantalla de pago antes de pagar.</p>",
+            "page": ""
+          }
+        },
+        "q6": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "¿Las faldas de pádel llevan short?",
+            "icon": "none",
+            "row_content": "<p>Sí: la falda-short de encaje y la falda plisada llevan un short interior integrado, para moverte en la pista con total libertad.</p>",
+            "page": ""
+          }
+        },
+        "q4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "¿Puedo devolverlo?",
+            "icon": "none",
+            "row_content": "<p>Sí. Tienes 14 días naturales para desistir. La prenda debe estar sin usar y sin daños. Los gastos de envío de la devolución corren de tu cuenta, salvo si el producto llega dañado o equivocado. Consulta nuestra <a href='/policies/refund-policy'>política de devoluciones</a>.</p>",
+            "page": ""
+          }
+        },
+        "q5": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "¿Cómo puedo pagar?",
+            "icon": "none",
+            "row_content": "<p>Puedes pagar con los métodos disponibles al finalizar la compra. Consulta las opciones que aparecen en el checkout antes de confirmar tu pedido.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q6",
+        "q4",
+        "q5"
+      ],
+      "settings": {
+        "caption": "Ayuda",
+        "heading": "Preguntas frecuentes",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "container_color_scheme": "scheme-1",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 64,
+        "padding_bottom": 96
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "stories",
+    "espalda_ed",
+    "coll",
+    "padel_ed",
+    "lookbook",
+    "leggings_ed",
+    "statement",
+    "yoga",
+    "stack",
+    "pearlset",
+    "details",
+    "brand_story",
+    "usp",
+    "faq"
+  ]
+}
