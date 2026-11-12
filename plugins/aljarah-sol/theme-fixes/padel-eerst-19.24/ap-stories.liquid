@@ -1,0 +1,59 @@
+{%- comment -%}
+  AP: rij met ronde 'story'-cirkels (zoals Instagram) die naar looks/producten linken.
+  Later te vervangen door echte klanten/creators: 'Las favoritas de @...'.
+  19.24: Pádel eerst, Para salir achteraan.
+{%- endcomment -%}
+{%- liquid
+  assign ap_st = 'aljarah-padel-manga-larga-chocolate.jpg|Pádel|/collections/padel;asol-mono-espalda-cafe.jpg|Backless|/collections/espalda-abierta;asol-azul-pose.jpg|Leggings|/collections/leggings;aljarah-sol-conjunto-v-5.jpg|Gym|/products/conjunto-deportivo-con-escote-en-v;serena-azul-acampanado.jpg|Yoga|/collections/yoga;asol-rosa-frontal.jpg|Nuevo|/collections/nuevo;asol-conjunto-acampanado-2.jpg|Para salir|/collections/para-salir;aljarah-sol-cj-original-photo-10.jpg|Ver todo|/collections/conjuntos' | split: ';'
+-%}
+<div class="ap-stories">
+  <p class="ap-stories__cap">Encuentra tu look</p>
+  <ul class="ap-stories__row" role="list">
+    {%- for ap_s in ap_st -%}
+      {%- assign ap_p = ap_s | split: '|' -%}
+      <li>
+        <a href="{{ ap_p[2] }}" class="ap-stories__item">
+          <span class="ap-stories__ring"><span class="ap-stories__pic"><img src="{{ images[ap_p[0]] | image_url: width: 320 }}" alt="" width="160" height="160" loading="lazy"></span></span>
+          <span class="ap-stories__label">{{ ap_p[1] }}</span>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+<style>
+  .ap-stories { max-width: 96rem; margin: 0 auto; padding: 2.4rem 0 0; text-align: center; }
+  .ap-stories__cap { margin: 0 0 1.4rem; font-size: 1.1rem; letter-spacing: .32em; text-transform: uppercase; color: rgb(184, 154, 94); }
+  .ap-stories__row { display: flex; justify-content: center; gap: 1.8rem; margin: 0; padding: .4rem 1.5rem 1rem; list-style: none; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 1.5rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .ap-stories__row::-webkit-scrollbar { display: none; }
+  .ap-stories__row li { flex: 0 0 auto; scroll-snap-align: start; }
+  .ap-stories__item { display: flex; flex-direction: column; align-items: center; gap: .8rem; color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+  .ap-stories__ring { display: block; width: 8.4rem; height: 8.4rem; padding: 2px; border-radius: 50%; background: linear-gradient(135deg, #e3cf9f, #b89a5e 55%, #8c6d3a); transition: transform .3s ease; }
+  .ap-stories__pic { display: block; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 2px solid rgb(var(--color-background)); background: #efe7da; }
+  .ap-stories__pic img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; transform: scale(1.45); transform-origin: 50% 10%; }
+  .ap-stories__item:hover .ap-stories__ring { transform: scale(1.05); }
+  .ap-stories__label { font-size: 1.15rem; letter-spacing: .14em; text-transform: uppercase; color: rgb(var(--color-foreground)); white-space: nowrap; }
+  @media screen and (max-width: 749px) {
+    .ap-stories__row { justify-content: flex-start; gap: 1.4rem; }
+    .ap-stories__row::after { content: ''; flex: 0 0 .1rem; }
+    .ap-stories__ring { width: 7.2rem; height: 7.2rem; }
+  }
+  @media screen and (min-width: 990px) {
+    .ap-stories { padding-top: 3.2rem; }
+    .ap-stories__ring { width: 9.6rem; height: 9.6rem; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Historias (looks)",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Historias (looks)"
+    }
+  ]
+}
+{% endschema %}
