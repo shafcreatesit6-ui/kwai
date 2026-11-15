@@ -1,0 +1,188 @@
+{%- comment -%}
+  AP 19.24: Acceso anticipado Black Friday (/pages/acceso-anticipado).
+  - Aanmelden = Shopify-klant met tags newsletter + acceso-anticipado (segment "Acceso anticipado Black Friday").
+  - Code ACCESO20 (20 % vanaf 2 producten) werkt alleen voor dat segment, van open_ts tot end_ts.
+  - Vóór open_ts: aanmelden + aftellen; bevestiging zegt dat de code per mail komt (Shopify Email-campagne op 19/11).
+  - Tussen open_ts en end_ts: na aanmelden staat de code direct in beeld.
+  - Na end_ts: melding dat het voorbij is.
+  De status wordt in de browser bepaald (data-open / data-end), zodat een gecachte pagina klopt.
+{%- endcomment -%}
+{%- assign ap_ea_return = request.path | append: '?dentro=1' -%}
+<div class="ap-ea" data-ap-ea data-open="{{ section.settings.open_ts }}" data-end="{{ section.settings.end_ts }}">
+  <div class="ap-ea__media">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 1400 | image_tag: widths: '600, 900, 1200, 1400', sizes: '(min-width: 990px) 50vw, 100vw', class: 'ap-ea__img', loading: 'eager', alt: section.settings.image_alt }}
+    {%- endif -%}
+  </div>
+  <div class="ap-ea__body">
+    <p class="ap-ea__brand">Aljarah Sol</p>
+    <p class="ap-ea__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    <h1 class="ap-ea__title">{{ section.settings.heading | escape }}</h1>
+    <p class="ap-ea__text">{{ section.settings.text | escape }}</p>
+
+    <div class="ap-ea__count" data-ap-ea-count hidden aria-live="off">
+      <p class="ap-ea__count-label">El acceso anticipado abre en</p>
+      <div class="ap-ea__count-row">
+        <div><strong data-d>0</strong><span>días</span></div>
+        <div><strong data-h>00</strong><span>horas</span></div>
+        <div><strong data-m>00</strong><span>min</span></div>
+        <div><strong data-s>00</strong><span>seg</span></div>
+      </div>
+    </div>
+    <p class="ap-ea__live" data-ap-ea-live hidden>El acceso anticipado ya está abierto. Apúntate y recibe tu código al momento.</p>
+
+    <ul class="ap-ea__perks" role="list">
+      <li><span>01</span><p>Compra 24 h antes que nadie, el 19 de noviembre</p></li>
+      <li><span>02</span><p><b>20&nbsp;%</b> en 2 o más prendas con tu código personal</p></li>
+      <li><span>03</span><p>Envío gratis a la península desde 35 €</p></li>
+    </ul>
+
+    {%- form 'customer', class: 'ap-ea__form', id: 'ApEaForm', return_to: ap_ea_return -%}
+      <div data-ap-ea-step="form"{% if form.posted_successfully? %} hidden{% endif %}>
+        <input type="hidden" name="contact[tags]" value="newsletter,acceso-anticipado">
+        <label class="visually-hidden" for="ApEaEmail">Correo electrónico</label>
+        <input id="ApEaEmail" class="ap-ea__input" type="email" name="contact[email]" value="{{ form.email }}" required autocomplete="email" placeholder="Tu correo electrónico">
+        <button type="submit" class="ap-ea__cta">Quiero entrar antes</button>
+        {%- if form.errors -%}
+          <p class="ap-ea__error" role="alert">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+        {%- endif -%}
+        <p class="ap-ea__consent">Al apuntarte recibirás correos de Aljarah Sol con novedades y ofertas. Puedes darte de baja cuando quieras. Consulta nuestra <a href="{{ routes.root_url }}policies/privacy-policy">política de privacidad</a>.</p>
+      </div>
+      <div class="ap-ea__done" data-ap-ea-step="done"{% unless form.posted_successfully? %} hidden{% endunless %}>
+        <p class="ap-ea__done-eyebrow">¡Estás dentro!</p>
+        <div data-ap-ea-wait>
+          <p class="ap-ea__done-title">Te avisamos el 19 de noviembre</p>
+          <p class="ap-ea__done-text">A las 00:00 del 19/11 te enviamos tu código por email, 24 horas antes que nadie. Revisa también la carpeta de promociones.</p>
+        </div>
+        <div data-ap-ea-code hidden>
+          <p class="ap-ea__done-title">Tu código de acceso anticipado</p>
+          <div class="ap-ea__code"><span>{{ section.settings.code | escape }}</span><button type="button" data-ap-ea-copy>Copiar</button></div>
+          <p class="ap-ea__done-text">20 % en 2 o más prendas. Úsalo con el mismo email con el que te has apuntado. Un uso por clienta, hasta el 26 de noviembre.</p>
+          <a class="ap-ea__cta ap-ea__cta--link" href="{{ section.settings.shop_link | default: routes.all_products_collection_url }}">Ver pádel</a>
+        </div>
+      </div>
+    {%- endform -%}
+
+    <p class="ap-ea__ended" data-ap-ea-ended hidden>El acceso anticipado ha terminado. <a href="{{ section.settings.shop_link | default: routes.all_products_collection_url }}">Descubre la colección</a>.</p>
+    <p class="ap-ea__small">No válido para el Conjunto Perla, el Conjunto de secado rápido ni el Vestido Ébano. No acumulable con otras ofertas.</p>
+  </div>
+</div>
+
+<style>
+  /* Op deze pagina geen welkomst-pop-up of zijlabel: het formulier staat al in beeld */
+  .ap-pop, .ap-side-tab { display: none !important; }
+  .ap-ea { display: grid; background: #14100d; color: #f7f3ec; }
+  @media (min-width: 990px) { .ap-ea { grid-template-columns: 1fr 1fr; min-height: calc(100vh - 10rem); } }
+  .ap-ea__media { position: relative; overflow: hidden; background: #2b2420; }
+  .ap-ea__img { display: block; width: 100%; height: 100%; max-height: 62vh; object-fit: cover; object-position: 50% 15%; }
+  @media (min-width: 990px) { .ap-ea__img { max-height: none; position: absolute; inset: 0; } }
+  .ap-ea__body { display: flex; flex-direction: column; justify-content: center; padding: 3.6rem 2rem 4.4rem; max-width: 60rem; margin: 0 auto; width: 100%; }
+  @media (min-width: 990px) { .ap-ea__body { padding: 6rem 6.4rem; } }
+  .ap-ea__brand { margin: 0 0 1.6rem; font-size: 1.1rem; letter-spacing: .4em; text-transform: uppercase; opacity: .7; }
+  .ap-ea__eyebrow { margin: 0 0 1rem; font-size: 1.15rem; letter-spacing: .34em; text-transform: uppercase; color: #b89a5e; }
+  .ap-ea__title { margin: 0; font-family: var(--font-heading-family); font-weight: 300; font-size: clamp(3.4rem, 6vw, 5.6rem); line-height: 1.05; color: #f7f3ec; }
+  .ap-ea__text { margin: 1.6rem 0 0; font-size: 1.55rem; line-height: 1.6; opacity: .85; }
+  .ap-ea__count { margin: 2.6rem 0 0; }
+  .ap-ea__count[hidden], .ap-ea__live[hidden], .ap-ea__ended[hidden] { display: none; }
+  .ap-ea__count-label { margin: 0 0 .8rem; font-size: 1.1rem; letter-spacing: .24em; text-transform: uppercase; opacity: .7; }
+  .ap-ea__count-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; max-width: 36rem; }
+  .ap-ea__count-row div { padding: 1.2rem .4rem; border: 1px solid rgba(184,154,94,.45); text-align: center; }
+  .ap-ea__count-row strong { display: block; font-family: var(--font-heading-family); font-size: 3rem; font-weight: 300; line-height: 1; color: #e3cf9f; }
+  .ap-ea__count-row span { display: block; margin-top: .4rem; font-size: 1rem; letter-spacing: .16em; text-transform: uppercase; opacity: .7; }
+  .ap-ea__live { margin: 2.4rem 0 0; padding: 1.2rem 1.4rem; border-left: 3px solid #b89a5e; background: rgba(184,154,94,.12); font-size: 1.4rem; }
+  .ap-ea__perks { margin: 2.8rem 0 0; padding: 0; list-style: none; display: grid; gap: 1.2rem; }
+  .ap-ea__perks li { display: flex; gap: 1.4rem; align-items: baseline; font-size: 1.45rem; line-height: 1.45; }
+  .ap-ea__perks span { flex: none; font-size: 1.1rem; letter-spacing: .12em; color: #b89a5e; }
+  .ap-ea__perks b { color: #e3cf9f; font-weight: 600; }
+  .ap-ea__perks p { margin: 0; }
+  .ap-ea__form { margin-top: 3rem; }
+  .ap-ea__form [hidden] { display: none !important; }
+  .ap-ea__input { width: 100%; -webkit-appearance: none; appearance: none; border: 0; border-radius: 0; border-bottom: 1px solid rgba(247,243,236,.5); background: transparent; color: #f7f3ec; font: inherit; font-size: 1.6rem; padding: 1.3rem 0; }
+  .ap-ea__input::placeholder { color: rgba(247,243,236,.55); }
+  .ap-ea__input:focus { outline: none; border-bottom: 2px solid #e3cf9f; }
+  .ap-ea__cta { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 5.2rem; margin-top: 1.8rem; border: 0; cursor: pointer; background: #b89a5e; color: #14100d; font-family: var(--font-body-family); font-size: 1.2rem; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; text-decoration: none; }
+  .ap-ea__cta:hover { background: #e3cf9f; }
+  .ap-ea__error { margin: 1rem 0 0; font-size: 1.3rem; color: #f2a29a; }
+  .ap-ea__consent { margin: 1.4rem 0 0; font-size: 1.15rem; line-height: 1.5; opacity: .6; }
+  .ap-ea__consent a, .ap-ea__ended a { color: inherit; }
+  .ap-ea__done { padding: 2.2rem; border: 1px solid rgba(184,154,94,.6); }
+  .ap-ea__done-eyebrow { margin: 0 0 .6rem; font-size: 1.1rem; letter-spacing: .3em; text-transform: uppercase; color: #b89a5e; }
+  .ap-ea__done-title { margin: 0; font-family: var(--font-heading-family); font-size: 2.6rem; font-weight: 300; line-height: 1.15; }
+  .ap-ea__done-text { margin: 1rem 0 0; font-size: 1.4rem; line-height: 1.55; opacity: .85; }
+  .ap-ea__code { display: flex; margin-top: 1.4rem; border: 1px dashed #b89a5e; }
+  .ap-ea__code span { flex: 1; padding: 1.4rem; font-size: 2.2rem; letter-spacing: .3em; text-align: center; color: #e3cf9f; }
+  .ap-ea__code button { border: 0; border-left: 1px dashed #b89a5e; background: transparent; color: inherit; padding: 0 1.8rem; cursor: pointer; font-size: 1.1rem; letter-spacing: .18em; text-transform: uppercase; }
+  .ap-ea__ended { margin: 2.4rem 0 0; font-size: 1.5rem; }
+  .ap-ea__small { margin: 2.4rem 0 0; font-size: 1.1rem; line-height: 1.5; opacity: .5; }
+</style>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-ap-ea]');
+    if (!root) return;
+    var open = parseInt(root.dataset.open, 10) * 1000, end = parseInt(root.dataset.end, 10) * 1000;
+    var q = location.search;
+    var posted = /[?&](dentro=1|customer_posted=true)/.test(q);
+    var form = root.querySelector('[data-ap-ea-step="form"]'), done = root.querySelector('[data-ap-ea-step="done"]');
+    var hasError = !!root.querySelector('.ap-ea__error');
+    if (posted && !hasError) {
+      form.hidden = true; done.hidden = false;
+      try { localStorage.setItem('ap-ea-joined', '1'); localStorage.setItem('ap-welkom-joined', '1'); } catch (e) {}
+      // URL opschonen, zodat de welkomst-pop-up (verderop op de pagina) dit niet als zijn eigen aanmelding ziet
+      try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+    }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    var count = root.querySelector('[data-ap-ea-count]');
+    function tick() {
+      var now = Date.now();
+      var isOpen = now >= open && now <= end, ended = now > end;
+      root.querySelector('[data-ap-ea-live]').hidden = !isOpen || !done.hidden;
+      root.querySelector('[data-ap-ea-wait]').hidden = isOpen;
+      root.querySelector('[data-ap-ea-code]').hidden = !isOpen;
+      if (ended) {
+        root.querySelector('.ap-ea__form').hidden = true;
+        root.querySelector('[data-ap-ea-ended]').hidden = false;
+        count.hidden = true;
+        return false;
+      }
+      if (now < open) {
+        var s = Math.floor((open - now) / 1000);
+        count.hidden = false;
+        count.querySelector('[data-d]').textContent = Math.floor(s / 86400);
+        count.querySelector('[data-h]').textContent = pad(Math.floor(s % 86400 / 3600));
+        count.querySelector('[data-m]').textContent = pad(Math.floor(s % 3600 / 60));
+        count.querySelector('[data-s]').textContent = pad(s % 60);
+      } else {
+        count.hidden = true;
+      }
+      return true;
+    }
+    if (tick()) { var t = setInterval(function () { if (!tick()) clearInterval(t); }, 1000); }
+    var copy = root.querySelector('[data-ap-ea-copy]');
+    if (copy) copy.addEventListener('click', function () {
+      var code = root.querySelector('.ap-ea__code span').textContent.trim();
+      if (navigator.clipboard) navigator.clipboard.writeText(code);
+      copy.textContent = 'Copiado';
+      setTimeout(function () { copy.textContent = 'Copiar'; }, 2500);
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "AP acceso anticipado",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Foto" },
+    { "type": "text", "id": "image_alt", "label": "Alt-tekst foto", "default": "Aljarah con el vestido Estela rosa lila en la pista" },
+    { "type": "text", "id": "eyebrow", "label": "Klein kopje", "default": "Black Friday · Acceso anticipado" },
+    { "type": "text", "id": "heading", "label": "Kop", "default": "Entra antes que nadie" },
+    { "type": "text", "id": "text", "label": "Tekst", "default": "Apúntate y compra el Black Friday de Aljarah Sol 24 horas antes que el resto, con un 20 % en tus looks de pádel." },
+    { "type": "text", "id": "open_ts", "label": "Open vanaf (Unix-tijd)", "default": "1795042800" },
+    { "type": "text", "id": "end_ts", "label": "Einde (Unix-tijd)", "default": "1795733999" },
+    { "type": "text", "id": "code", "label": "Kortingscode", "default": "ACCESO20" },
+    { "type": "url", "id": "shop_link", "label": "Link knop 'Ver pádel'" }
+  ],
+  "presets": [ { "name": "AP acceso anticipado" } ]
+}
+{% endschema %}
