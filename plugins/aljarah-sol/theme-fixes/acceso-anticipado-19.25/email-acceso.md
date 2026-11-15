@@ -18,7 +18,7 @@ Tu código personal: **ACCESO20**
 - Un uso por clienta, válido hasta el 26 de noviembre.
 - Envío gratis a la península desde 35 €.
 
-Mañana se abre para todo el mundo. Las tallas más buscadas vuelan primero.
+Mañana se abre para todo el mundo: tú ya puedes elegir hoy.
 
 Con cariño,
 Aljarah Sol
