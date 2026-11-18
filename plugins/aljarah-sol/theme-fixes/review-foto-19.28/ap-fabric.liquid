@@ -1,0 +1,163 @@
+{%- comment -%}
+  AP 19.23: "Detalles del tejido" (zoals Shein): samenstelling, rek, transparantie, binnenkant, wassen.
+  Wordt afgeleid uit de productbeschrijving (sectie <h3>Composición y cuidados</h3> + tekst).
+  Alleen tonen wat we zeker weten: onbekend = rij weglaten.
+  Overschrijven kan met metafield custom.ap_tejido (json), bv. {"Composición":"75% nailon, 25% elastano","Elasticidad":"Alta"}.
+  Accepts: product
+{%- endcomment -%}
+{%- liquid
+  assign ap_f_override = product.metafields.custom.ap_tejido.value
+  assign ap_f_desc = product.description
+  assign ap_f_dl = ap_f_desc | strip_html | downcase
+
+  assign ap_f_comp = ''
+  assign ap_f_care = ''
+  if ap_f_desc contains '<h3>Composición y cuidados</h3>'
+    assign ap_f_sec = ap_f_desc | split: '<h3>Composición y cuidados</h3>' | last | split: '<h3>' | first
+    assign ap_f_comp = ap_f_sec | split: '<br>' | first | split: '</p>' | first | strip_html | remove_first: 'Composición:' | strip
+    assign ap_f_last = ap_f_comp | slice: -1
+    if ap_f_last == '.'
+      assign ap_f_len = ap_f_comp.size | minus: 1
+      assign ap_f_comp = ap_f_comp | slice: 0, ap_f_len
+    endif
+    assign ap_f_c5 = ap_f_comp | downcase | slice: 0, 5
+    if ap_f_c5 == 'lavar'
+      assign ap_f_comp = ''
+    endif
+    assign ap_f_cs = ap_f_sec | strip_html | downcase
+    if ap_f_cs contains 'a mano o a máquina'
+      assign ap_f_care = 'A mano o en lavadora, en frío'
+    elsif ap_f_cs contains 'lavar a mano'
+      assign ap_f_care = 'A mano, en frío'
+    elsif ap_f_cs contains 'a máquina'
+      assign ap_f_care = 'Lavadora en frío'
+    endif
+  endif
+
+  assign ap_f_el = ''
+  if ap_f_dl contains 'muy elástic' or ap_f_dl contains 'sin costuras' or ap_f_dl contains 'segunda piel' or ap_f_dl contains 'alta elasticidad'
+    assign ap_f_el = 'Alta'
+  elsif ap_f_dl contains 'elastano' or ap_f_dl contains 'elástic' or ap_f_dl contains 'spandex'
+    assign ap_f_el = 'Media'
+  endif
+
+  assign ap_f_tr = ''
+  if ap_f_dl contains 'algo transparente' or ap_f_dl contains 'semitransparente'
+    assign ap_f_tr = 'Algo transparente'
+  elsif ap_f_dl contains 'no transparenta' or ap_f_dl contains 'transparencias' or ap_f_dl contains 'opaco'
+    assign ap_f_tr = 'No transparenta'
+  endif
+
+  assign ap_f_in = ''
+  if ap_f_dl contains 'short interior'
+    assign ap_f_in = ap_f_in | append: ' · Short interior'
+  endif
+  if ap_f_dl contains 'copas extraíbles'
+    assign ap_f_in = ap_f_in | append: ' · Copas extraíbles'
+  elsif ap_f_dl contains 'copas integradas' or ap_f_dl contains 'tazas incorporadas'
+    assign ap_f_in = ap_f_in | append: ' · Copas integradas'
+  endif
+  if ap_f_dl contains 'forro'
+    assign ap_f_in = ap_f_in | append: ' · Con forro'
+  endif
+  assign ap_f_in = ap_f_in | slice: 3, 200
+
+  assign ap_f_rows = 0
+  if ap_f_comp != blank
+    assign ap_f_rows = ap_f_rows | plus: 1
+  endif
+  if ap_f_el != blank
+    assign ap_f_rows = ap_f_rows | plus: 1
+  endif
+  if ap_f_tr != blank
+    assign ap_f_rows = ap_f_rows | plus: 1
+  endif
+  if ap_f_in != blank
+    assign ap_f_rows = ap_f_rows | plus: 1
+  endif
+  if ap_f_care != blank
+    assign ap_f_rows = ap_f_rows | plus: 1
+  endif
+-%}
+{%- if ap_f_override != blank or ap_f_rows >= 2 -%}
+  <div class="ap-fab quick-add-hidden">
+    <p class="ap-fab__h">Detalles del tejido</p>
+    <dl class="ap-fab__list">
+      {%- if ap_f_override != blank -%}
+        {%- for ap_f_row in ap_f_override -%}
+          <div><dt>{{ ap_f_row[0] | escape }}</dt><dd>{{ ap_f_row[1] | escape }}</dd></div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- if ap_f_comp != blank -%}<div class="ap-fab__wide"><dt>Composición</dt><dd>{{ ap_f_comp | escape }}</dd></div>{%- endif -%}
+        {%- if ap_f_el != blank -%}<div><dt>Elasticidad</dt><dd>{{ ap_f_el }}</dd></div>{%- endif -%}
+        {%- if ap_f_tr != blank -%}<div><dt>Transparencia</dt><dd>{{ ap_f_tr }}</dd></div>{%- endif -%}
+        {%- if ap_f_in != blank -%}<div><dt>Interior</dt><dd>{{ ap_f_in }}</dd></div>{%- endif -%}
+        {%- if ap_f_care != blank -%}<div><dt>Lavado</dt><dd>{{ ap_f_care }}</dd></div>{%- endif -%}
+      {%- endif -%}
+    </dl>
+  </div>
+  <style>
+    .ap-fab { margin: .4rem 0 .8rem; padding: 1.2rem 1.4rem; border: 1px solid rgba(184,154,94,.45); }
+    .ap-fab__h { margin: 0 0 .8rem; font-size: 1.15rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    .ap-fab__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem 1.6rem; margin: 0; }
+    .ap-fab__list > div { min-width: 0; }
+    .ap-fab__wide { grid-column: 1 / -1; }
+    .ap-fab dt { font-size: 1.1rem; letter-spacing: .1em; text-transform: uppercase; opacity: .6; }
+    .ap-fab dd { margin: .15rem 0 0; font-size: 1.4rem; line-height: 1.4; }
+    .ap-fab dd::first-letter { text-transform: uppercase; }
+  </style>
+{%- endif -%}
+{%- comment -%}
+  19.27: review-link. Met ?resena=1 achter een product-URL blijft het reviewblok zichtbaar
+  (ook als er nog geen reviews zijn) en opent het Judge.me-formulier "Escribir una reseña" vanzelf.
+  Zonder ?resena=1 verandert er niets.
+  19.28: met &variant=<id> staat in het formulier de foto van die variant (vooraanzicht van die kleur)
+  en de kleur achter de productnaam, bv. "… · Negro".
+{%- endcomment -%}
+<script>
+  (function () {
+    if (!/[?&]resena=1/.test(location.search)) return;
+    var css = document.createElement('style');
+    css.textContent = '.shopify-section:has(.jdgm-review-widget),.shopify-section:has(.jdgm-rev-widg){display:block!important}';
+    document.head.appendChild(css);
+    var n = 0, opened = false;
+    var vid = (location.search.match(/[?&]variant=(\d+)/) || [])[1];
+    var photo = null, colour = '';
+    if (vid) {
+      fetch(location.pathname.replace(/\/$/, '') + '.js').then(function (r) { return r.json(); }).then(function (pr) {
+        var v = (pr.variants || []).filter(function (x) { return String(x.id) === vid; })[0];
+        if (!v) return;
+        var img = v.featured_image && v.featured_image.src || (v.featured_media && v.featured_media.preview_image && v.featured_media.preview_image.src);
+        if (img) photo = img.replace(/^https?:/, '') + (img.indexOf('?') > -1 ? '&' : '?') + 'width=1024';
+        colour = v.option1 || '';
+        fixPhoto();
+      }).catch(function () {});
+    }
+    function fixPhoto() {
+      if (!photo) return;
+      var k = 0, iv = setInterval(function () {
+        k++;
+        [].forEach.call(document.querySelectorAll('.jdgm-write-review-modal__product-image img'), function (im) {
+          if (im.getAttribute('src') !== photo) { im.removeAttribute('srcset'); im.setAttribute('src', photo); }
+        });
+        [].forEach.call(document.querySelectorAll('.jdgm-write-review-modal__product-title'), function (tt) {
+          if (colour && !tt.dataset.apCol) { tt.dataset.apCol = '1'; tt.textContent = tt.textContent.trim() + ' · ' + colour; }
+        });
+        if (k > 40) clearInterval(iv);
+      }, 300);
+    }
+    var t = setInterval(function () {
+      n++;
+      var btn = [].filter.call(document.querySelectorAll('.jm-action-buttons__button, .jdgm-write-rev-link, button, a'), function (e) {
+        return e.offsetParent !== null && /escribir una rese|write a review/i.test(e.textContent);
+      })[0];
+      if (!opened && btn) {
+        opened = true;
+        clearInterval(t);
+        btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(function () { btn.click(); fixPhoto(); }, 700);
+      }
+      if (n > 60) clearInterval(t);
+    }, 500);
+  })();
+</script>
