@@ -11,3 +11,9 @@ Review-links voor de collab-modellen:
 - Ester (mono corto, Negro / S): `/products/mono-corto-espalda-abierta-cremallera?resena=1&variant=55284999192917`
 - Carlota (Vestido Arcilla, Negro / S): `/products/vestido-arcilla-tenis-cremallera-mangas-desmontables?resena=1&variant=55633744003413`
 - Amira (mono acampanado, Café / S): `/products/mono-acampanado-espalda-abierta-cremallera?resena=1&variant=55285072757077`
+
+## Update: persoonlijk reviewformulier
+- **Naam:** `&nombre=Ester` (of de voornaam van een ingelogde klant) zet "¿Qué te ha parecido, Ester?" als titel en vult het naamveld alvast in.
+- **Foto's:** hele, niet bijgesneden foto's van de gekozen kleur (alt-tekst met de kleurnaam), met kleine foto's eronder om te wisselen.
+- **Bestelling:** "Tu pedido: Negro · S" onder de productnaam als de link een variant bevat.
+- **Ook zonder link:** elke klant die "Escribir una reseña" opent krijgt dezelfde stijl en foto's.

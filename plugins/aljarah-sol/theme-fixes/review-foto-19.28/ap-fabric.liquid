@@ -108,56 +108,141 @@
   </style>
 {%- endif -%}
 {%- comment -%}
-  19.27: review-link. Met ?resena=1 achter een product-URL blijft het reviewblok zichtbaar
-  (ook als er nog geen reviews zijn) en opent het Judge.me-formulier "Escribir una reseña" vanzelf.
-  Zonder ?resena=1 verandert er niets.
-  19.28: met &variant=<id> staat in het formulier de foto van die variant (vooraanzicht van die kleur)
-  en de kleur achter de productnaam, bv. "… · Negro".
+  19.27/19.28/19.29: reviewformulier van Judge.me in Aljarah-stijl.
+  - ?resena=1 achter een product-URL: reviewblok zichtbaar (ook zonder reviews) en "Escribir una reseña" opent vanzelf.
+  - &variant=<id>: die variant wordt gekozen; in het formulier staan de hele (niet bijgesneden) foto's van die kleur
+    plus "Tu pedido: Negro · S".
+  - &nombre=Ester (of ingelogde klant): begroeting "¿Qué te ha parecido, Ester?" en naamveld alvast ingevuld.
+  - Zonder parameters: elke klant die "Escribir una reseña" opent krijgt dezelfde stijl en foto's van de gekozen kleur.
 {%- endcomment -%}
+<style>
+  .jdgm-write-review-modal__container { background: #f7f3ec !important; color: #2b2420; }
+  .jdgm-write-review-modal__title { font-family: var(--font-heading-family) !important; font-weight: 400 !important; font-size: clamp(2.6rem, 6vw, 3.4rem) !important; line-height: 1.15 !important; color: #2b2420 !important; }
+  .jdgm-write-review-modal__intro { color: rgba(43,36,32,.75) !important; }
+  .jdgm-write-review-modal__product-title { font-family: var(--font-heading-family) !important; font-weight: 500 !important; font-size: 2rem !important; color: #2b2420 !important; }
+  .jdgm-write-review-modal__product-image.ap-rv-on { width: 100% !important; max-width: 36rem !important; height: auto !important; margin: 1.6rem auto 0 !important; border-radius: 0 !important; overflow: visible !important; background: none !important; }
+  .jdgm-write-review-modal__product-image.ap-rv-on > img { display: none !important; }
+  .ap-rv__main { display: block; width: 100%; height: auto; max-height: 58vh; object-fit: contain; background: #efe7da; }
+  .ap-rv__thumbs { display: flex; justify-content: center; gap: .6rem; margin-top: .8rem; flex-wrap: wrap; }
+  .ap-rv__thumbs button { width: 5.4rem; height: 7.2rem; padding: 0; border: 1px solid rgba(43,36,32,.18); background: #efe7da; cursor: pointer; }
+  .ap-rv__thumbs button[aria-current="true"] { border-color: #2b2420; box-shadow: inset 0 0 0 1px #2b2420; }
+  .ap-rv__thumbs img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .ap-rv__order { margin: .8rem 0 0; font-size: 1.2rem; letter-spacing: .18em; text-transform: uppercase; color: #b89a5e; text-align: center; }
+  .jdgm-write-review-modal__nav-btn, .jdgm-write-review-modal__btn { border-radius: 0 !important; letter-spacing: .14em !important; }
+</style>
 <script>
   (function () {
-    if (!/[?&]resena=1/.test(location.search)) return;
-    var css = document.createElement('style');
-    css.textContent = '.shopify-section:has(.jdgm-review-widget),.shopify-section:has(.jdgm-rev-widg){display:block!important}';
-    document.head.appendChild(css);
+    var q = new URLSearchParams(location.search);
+    var isLink = q.get('resena') === '1';
+    var name = (q.get('nombre') || {{ customer.first_name | default: '' | json }} || '').trim().slice(0, 40);
+    var vidParam = q.get('variant');
+    var product = null;
+
+    if (isLink) {
+      var css = document.createElement('style');
+      css.textContent = '.shopify-section:has(.jdgm-review-widget),.shopify-section:has(.jdgm-rev-widg){display:block!important}';
+      document.head.appendChild(css);
+    }
+
+    fetch(location.pathname.replace(/\/$/, '').replace(/\/collections\/[^/]+/, '') + '.js')
+      .then(function (r) { return r.json(); }).then(function (p) { product = p; }).catch(function () {});
+
+    function currentVariant() {
+      if (!product) return null;
+      var id = vidParam;
+      var pick = document.querySelector('main product-info [name="id"], main form[action*="/cart/add"] [name="id"]');
+      if (!isLink && pick && pick.value) id = pick.value;
+      return (product.variants || []).filter(function (v) { return String(v.id) === String(id); })[0] || (product.variants || [])[0];
+    }
+    function sized(src, w) { src = String(src).replace(/^https?:/, ''); return src + (src.indexOf('?') > -1 ? '&' : '?') + 'width=' + w; }
+    function colourPhotos(v) {
+      var col = (v && v.option1 || '').toLowerCase();
+      var media = (product.media || []).filter(function (m) { return m.media_type === 'image'; });
+      var list = media.filter(function (m) { return col && (m.alt || '').toLowerCase().indexOf(col) > -1; });
+      var first = v && v.featured_media ? v.featured_media.id : null;
+      if (first) list.sort(function (a, b) { return (b.id === first) - (a.id === first); });
+      if (!list.length && v && v.featured_image) list = [{ src: v.featured_image.src, alt: v.featured_image.alt || '' }];
+      if (!list.length) list = media.slice(0, 4);
+      return list.slice(0, 5).map(function (m) { return { src: m.src || (m.preview_image && m.preview_image.src), alt: m.alt || '' }; });
+    }
+
+    function enhance(modal) {
+      if (!modal || modal.dataset.apRv || !product) return false;
+      var box = modal.querySelector('.jdgm-write-review-modal__product-image');
+      if (!box) return false;
+      modal.dataset.apRv = '1';
+      var v = currentVariant();
+      var photos = colourPhotos(v);
+      if (photos.length) {
+        box.classList.add('ap-rv-on');
+        var wrap = document.createElement('div');
+        wrap.className = 'ap-rv';
+        var main = document.createElement('img');
+        main.className = 'ap-rv__main'; main.alt = photos[0].alt; main.src = sized(photos[0].src, 1200);
+        wrap.appendChild(main);
+        if (photos.length > 1) {
+          var th = document.createElement('div'); th.className = 'ap-rv__thumbs';
+          photos.forEach(function (ph, k) {
+            var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', ph.alt || ('Foto ' + (k + 1)));
+            if (!k) b.setAttribute('aria-current', 'true');
+            var im = document.createElement('img'); im.src = sized(ph.src, 200); im.alt = '';
+            b.appendChild(im);
+            b.addEventListener('click', function () {
+              main.src = sized(ph.src, 1200); main.alt = ph.alt;
+              [].forEach.call(th.children, function (x) { x.removeAttribute('aria-current'); });
+              b.setAttribute('aria-current', 'true');
+            });
+            th.appendChild(b);
+          });
+          wrap.appendChild(th);
+        }
+        box.appendChild(wrap);
+      }
+      var t = modal.querySelector('.jdgm-write-review-modal__product-title');
+      if (t && v && product.variants.length > 1) {
+        var o = document.createElement('p'); o.className = 'ap-rv__order';
+        o.textContent = (isLink && vidParam ? 'Tu pedido: ' : '') + [v.option1, v.option2].filter(Boolean).join(' · ');
+        t.insertAdjacentElement('afterend', o);
+      }
+      if (name) {
+        var title = modal.querySelector('.jdgm-write-review-modal__page--review-form-intro .jdgm-write-review-modal__title');
+        var intro = modal.querySelector('.jdgm-write-review-modal__page--review-form-intro .jdgm-write-review-modal__intro');
+        if (title) title.textContent = '¿Qué te ha parecido, ' + name + '?';
+        if (intro) intro.textContent = 'Cuéntanos cómo te queda: tu opinión ayuda a otras chicas a elegir su talla.';
+        var ni = modal.querySelector('#jdgm-name-input');
+        if (ni && !ni.value) { ni.value = name; ni.dispatchEvent(new Event('input', { bubbles: true })); ni.dispatchEvent(new Event('change', { bubbles: true })); }
+      }
+      return true;
+    }
+
+    // Elke keer dat het formulier opent (ook zonder link) de stijl en foto's toepassen
+    var queued = false;
+    var obs = new MutationObserver(function () {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () {
+        queued = false;
+        [].forEach.call(document.querySelectorAll('.jdgm-write-review-modal__container:not([data-ap-rv])'), function (m) {
+          if (m.getBoundingClientRect().height > 0) enhance(m);
+        });
+      });
+    });
+    obs.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
+
+    if (!isLink) return;
     var n = 0, opened = false;
-    var vid = (location.search.match(/[?&]variant=(\d+)/) || [])[1];
-    var photo = null, colour = '';
-    if (vid) {
-      fetch(location.pathname.replace(/\/$/, '') + '.js').then(function (r) { return r.json(); }).then(function (pr) {
-        var v = (pr.variants || []).filter(function (x) { return String(x.id) === vid; })[0];
-        if (!v) return;
-        var img = v.featured_image && v.featured_image.src || (v.featured_media && v.featured_media.preview_image && v.featured_media.preview_image.src);
-        if (img) photo = img.replace(/^https?:/, '') + (img.indexOf('?') > -1 ? '&' : '?') + 'width=1024';
-        colour = v.option1 || '';
-        fixPhoto();
-      }).catch(function () {});
-    }
-    function fixPhoto() {
-      if (!photo) return;
-      var k = 0, iv = setInterval(function () {
-        k++;
-        [].forEach.call(document.querySelectorAll('.jdgm-write-review-modal__product-image img'), function (im) {
-          if (im.getAttribute('src') !== photo) { im.removeAttribute('srcset'); im.setAttribute('src', photo); }
-        });
-        [].forEach.call(document.querySelectorAll('.jdgm-write-review-modal__product-title'), function (tt) {
-          if (colour && !tt.dataset.apCol) { tt.dataset.apCol = '1'; tt.textContent = tt.textContent.trim() + ' · ' + colour; }
-        });
-        if (k > 40) clearInterval(iv);
-      }, 300);
-    }
-    var t = setInterval(function () {
+    var timer = setInterval(function () {
       n++;
       var btn = [].filter.call(document.querySelectorAll('.jm-action-buttons__button, .jdgm-write-rev-link, button, a'), function (e) {
         return e.offsetParent !== null && /escribir una rese|write a review/i.test(e.textContent);
       })[0];
-      if (!opened && btn) {
+      if (!opened && btn && product) {
         opened = true;
-        clearInterval(t);
+        clearInterval(timer);
         btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(function () { btn.click(); fixPhoto(); }, 700);
+        setTimeout(function () { btn.click(); }, 700);
       }
-      if (n > 60) clearInterval(t);
+      if (n > 60) clearInterval(timer);
     }, 500);
   })();
 </script>
