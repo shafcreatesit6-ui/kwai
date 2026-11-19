@@ -133,6 +133,7 @@
   .ap-rv-cta__stars { color: #b89a5e; font-size: 1.6rem; letter-spacing: .12em; line-height: 1; }
   .ap-rv-cta__txt { text-decoration: underline; text-underline-offset: .35rem; }
   .jdgm-prev-badge { cursor: pointer; }
+  body.ap-rv-open shopify-chat, body.ap-rv-open #shopify-chat { display: none !important; }
 </style>
 <script>
   (function () {
@@ -226,9 +227,12 @@
       queued = true;
       requestAnimationFrame(function () {
         queued = false;
-        [].forEach.call(document.querySelectorAll('.jdgm-write-review-modal__container:not([data-ap-rv])'), function (m) {
-          if (m.getBoundingClientRect().height > 0) enhance(m);
+        var anyOpen = false;
+        [].forEach.call(document.querySelectorAll('.jdgm-write-review-modal__container'), function (m) {
+          if (m.getBoundingClientRect().height > 0) { anyOpen = true; if (!m.dataset.apRv) enhance(m); }
         });
+        // chatknop weg zolang het reviewformulier open is
+        document.body.classList.toggle('ap-rv-open', anyOpen);
       });
     });
     obs.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style'] });

@@ -23,3 +23,8 @@ Review-links voor de collab-modellen:
 - Een klik maakt het reviewblok zichtbaar en opent het formulier.
 - Judge.me verbergt zijn eigen sterren bij 0 reviews.
 - Zodra er reviews zijn, springen de sterren van Judge.me met een klik naar het reviewblok.
+
+## Chatknop (Shopify Inbox)
+- `header-group.json` (aj-style custom_liquid): de chatknop staat alleen op de homepage en verschijnt pas na 400px scrollen. Op alle andere pagina's (product, collectie, winkelwagen) is hij verborgen.
+- `ap-fabric.liquid`: zolang het reviewformulier open is krijgt de body `ap-rv-open` en is de chatknop verborgen.
+- Getest op 19.28 (iPhone 13): homepage bovenaan verborgen, na scrollen zichtbaar; productpagina verborgen.
