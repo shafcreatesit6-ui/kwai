@@ -1,0 +1,155 @@
+{% comment %}
+  Aljarah Sol: welke foto's horen bij de gekozen kleur.
+
+  Een foto hoort bij een kleur als:
+  - hij de variantfoto is van een variant met die kleur, of
+  - de kleurnaam in de alt-tekst staat (ook negra/negros, grises, zonder accenten).
+  Foto's zonder kleur in de alt-tekst (details) worden verborgen,
+  tenzij de alt-tekst 'todos los colores' bevat: dan tonen ze bij elke kleur.
+  Foto's met meerdere kleuren (groepsfoto) worden verborgen.
+
+  Output: 'ALL' (niet filteren) of '<aantal>|,id1,id2,'
+
+  Accepts:
+  - product: {Object}
+{% endcomment %}
+{%- liquid
+  assign asol_pos = 0
+  for opt in product.options_with_values
+    assign opt_name = opt.name | downcase | strip
+    if opt_name == 'color' or opt_name == 'colour' or opt_name == 'kleur' or opt_name == 'couleur' or opt_name == 'colore' or opt_name == 'farbe'
+      assign asol_pos = opt.position
+      assign asol_values = opt.values
+    endif
+  endfor
+
+  if asol_pos == 0 or asol_values.size < 2
+    echo 'ALL'
+  else
+    assign sel = product.selected_or_first_available_variant
+    case asol_pos
+      when 1
+        assign sel_color = sel.option1
+      when 2
+        assign sel_color = sel.option2
+      else
+        assign sel_color = sel.option3
+    endcase
+    assign sel_color = sel_color | downcase | strip
+
+    assign keep_ids = ','
+    assign keep_count = 0
+
+    for media in product.media
+      assign m_color = ''
+      assign m_multi = false
+      assign m_shared = false
+
+      for v in product.variants
+        if v.featured_media.id == media.id
+          case asol_pos
+            when 1
+              assign m_color = v.option1
+            when 2
+              assign m_color = v.option2
+            else
+              assign m_color = v.option3
+          endcase
+          assign m_color = m_color | downcase | strip
+          break
+        endif
+      endfor
+
+      if m_color == ''
+        assign alt = media.alt | default: '' | downcase | replace: 'á', 'a' | replace: 'é', 'e' | replace: 'í', 'i' | replace: 'ó', 'o' | replace: 'ú', 'u' | replace: 'ü', 'u' | replace: 'ñ', 'n' | replace: 'à', 'a' | replace: 'è', 'e' | replace: 'ç', 'c'
+        assign alt = alt | replace: '–', ' ' | replace: '—', ' ' | replace: '-', ' ' | replace: ',', ' ' | replace: '.', ' ' | replace: '(', ' ' | replace: ')', ' ' | replace: '/', ' ' | replace: ':', ' ' | replace: ';', ' ' | replace: '"', ' ' | replace: "'", ' ' | replace: '!', ' ' | replace: '?', ' ' | replace: '+', ' ' | replace: '&', ' ' | replace: '|', ' ' | replace: '·', ' '
+        assign alt = alt | prepend: ' ' | append: ' '
+
+        assign best = ''
+        for value in asol_values
+          assign c = value | downcase | replace: 'á', 'a' | replace: 'é', 'e' | replace: 'í', 'i' | replace: 'ó', 'o' | replace: 'ú', 'u' | replace: 'ü', 'u' | replace: 'ñ', 'n' | replace: '-', ' ' | strip
+          assign words = c | split: ' '
+          assign first = words.first
+          assign rest = c | remove_first: first | strip
+          assign suffix = ' '
+          if rest != ''
+            assign suffix = ' ' | append: rest | append: ' '
+          endif
+
+          assign hit = false
+          assign form = ' ' | append: first | append: suffix
+          if alt contains form
+            assign hit = true
+          endif
+          assign form = ' ' | append: first | append: 's' | append: suffix
+          if alt contains form
+            assign hit = true
+          endif
+          assign last_char = first | slice: -1, 1
+          if last_char == 'o'
+            assign stem_len = first.size | minus: 1
+            assign stem = first | slice: 0, stem_len
+            assign form = ' ' | append: stem | append: 'a' | append: suffix
+            if alt contains form
+              assign hit = true
+            endif
+            assign form = ' ' | append: stem | append: 'as' | append: suffix
+            if alt contains form
+              assign hit = true
+            endif
+          elsif last_char == 's'
+            assign form = ' ' | append: first | append: 'es' | append: suffix
+            if alt contains form
+              assign hit = true
+            endif
+          endif
+
+          if hit
+            assign c_raw = value | downcase | strip
+            if best == ''
+              assign best = c_raw
+              assign best_n = c
+            elsif best_n contains c
+              # kortere kleur (gris) binnen een langere (gris perla): de langere telt
+              assign best = best
+            elsif c contains best_n
+              assign best = c_raw
+              assign best_n = c
+            else
+              assign m_multi = true
+            endif
+          endif
+        endfor
+
+        unless m_multi
+          assign m_color = best
+        endunless
+
+        assign m_shared = false
+        if alt contains ' todos los colores '
+          assign m_shared = true
+          assign m_color = ''
+          assign m_multi = false
+        endif
+      endif
+
+      assign keep = false
+      if m_shared
+        assign keep = true
+      elsif m_color == sel_color and m_multi == false
+        assign keep = true
+      endif
+
+      if keep
+        assign keep_ids = keep_ids | append: media.id | append: ','
+        assign keep_count = keep_count | plus: 1
+      endif
+    endfor
+
+    if keep_count == 0
+      echo 'ALL'
+    else
+      echo keep_count | append: '|' | append: keep_ids
+    endif
+  endif
+-%}

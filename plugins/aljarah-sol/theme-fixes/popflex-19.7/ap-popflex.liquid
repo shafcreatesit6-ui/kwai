@@ -1,0 +1,78 @@
+{%- comment -%}
+  AP: Popflex-look (thema 19.7).
+  - Menu in hoofdletters (schreefloos, ruime letterafstand).
+  - Homepage: menu transparant over de split-hero zolang je bovenaan staat; bij scrollen weer de gewone balk.
+  - Productkaarten 3:4 en vanaf de bovenkant getoond, zodat hoofden niet wegvallen; zonder snelle-toevoegknop.
+  - Vast labeltje aan de zijkant dat de welkomst-popup opent (verdwijnt als je al bent aangemeld).
+{%- endcomment -%}
+<button type="button" class="ap-side-tab" data-ap-pop-open hidden>{{ section.settings.tab_text | escape }}</button>
+
+<style>
+  .header__inline-menu .list-menu--inline > li > a,
+  .header__inline-menu .list-menu--inline > li summary,
+  .header__inline-menu .list-menu--inline > li > a span,
+  .header__inline-menu .list-menu--inline > li summary span {
+    font-family: var(--font-body-family); text-transform: uppercase; letter-spacing: .2em; font-size: 1.2rem;
+  }
+  .header__inline-menu .list-menu--inline { gap: 0 .8rem; }
+
+  /* Homepage: transparant menu over de hero */
+  body:has(main[data-template="index"] > .shopify-section:first-child .ap-sh) main > .shopify-section:first-child .ap-sh {
+    margin-top: calc(-1 * var(--header-height, 0px));
+  }
+  body:has(main[data-template="index"] > .shopify-section:first-child .ap-sh) .section-header:not(.scrolled-past-header):not(.shopify-section-header-sticky) .header-wrapper {
+    background: transparent; border-bottom-color: transparent; box-shadow: none;
+  }
+  body:has(main[data-template="index"] > .shopify-section:first-child .ap-sh) .section-header:not(.scrolled-past-header):not(.shopify-section-header-sticky) :is(.list-menu--inline > li > a, .list-menu--inline > li summary, .header__icon) {
+    color: #fff;
+  }
+  body:has(main[data-template="index"] > .shopify-section:first-child .ap-sh) .section-header:not(.scrolled-past-header):not(.shopify-section-header-sticky) .header__heading-logo {
+    filter: brightness(0) invert(1);
+  }
+  body:has(main[data-template="index"] > .shopify-section:first-child .ap-sh) .section-header .header-wrapper,
+  body:has(main[data-template="index"] > .shopify-section:first-child .ap-sh) .section-header .header__heading-logo {
+    transition: background-color .25s ease, filter .25s ease;
+  }
+
+  /* Productkaarten: 3:4, beeld vanaf boven, rustig zonder knop */
+  .card__inner.ratio { --ratio-percent: 133.333% !important; }
+  .card .card__media .media img { object-position: 50% 0 !important; }
+  .product-card-wrapper .quick-add { display: none !important; }
+
+  /* Zijlabel */
+  .ap-side-tab {
+    position: fixed; left: 0; top: 50%; z-index: 90; transform: translateY(-50%) rotate(180deg);
+    writing-mode: vertical-rl; padding: 1.8rem 1rem; border: 0; cursor: pointer;
+    background: #f7f3ec; color: #14100d; box-shadow: 0 .4rem 1.6rem rgba(20,16,13,.18);
+    font-family: var(--font-body-family); font-size: 1.15rem; letter-spacing: .22em; text-transform: uppercase;
+  }
+  .ap-side-tab:hover { background: #14100d; color: #f7f3ec; }
+  .ap-side-tab[hidden] { display: none; }
+  @media screen and (max-width: 749px) {
+    .ap-side-tab { padding: 1.3rem .7rem; font-size: 1rem; letter-spacing: .18em; }
+  }
+</style>
+
+<script>
+  (function () {
+    var tab = document.querySelector('.ap-side-tab');
+    if (!tab) return;
+    var joined = false;
+    try { joined = !!localStorage.getItem('ap-welkom-joined'); } catch (e) {}
+    function hasPop() { return !!document.querySelector('.ap-pop'); }
+    function show() { if (!joined && hasPop()) tab.hidden = false; }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', show); else show();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "AP Popflex-look",
+  "tag": "div",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "text", "id": "tab_text", "label": "Tekst zijlabel", "default": "-10% en tu primer pedido" }
+  ],
+  "presets": [ { "name": "AP Popflex-look" } ]
+}
+{% endschema %}

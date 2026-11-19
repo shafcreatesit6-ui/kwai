@@ -1,0 +1,148 @@
+{%- comment -%}
+  AP: "Próximamente"-pagina voor de pala Golpe de Oro.
+  Nog niet te koop: alleen een e-mailinschrijving (klant met tags newsletter + golpe-de-oro).
+{%- endcomment -%}
+{%- assign ap_go_negro = images['pala-padel-golpe-de-oro-negro-aljarah-sol.jpg'] -%}
+{%- assign ap_go_blanco = images['pala-padel-golpe-de-oro-blanco-aljarah-sol.jpg'] -%}
+<div class="ap-go">
+  <div class="ap-go__inner page-width">
+    <div class="ap-go__head">
+      <p class="ap-go__cap">Próximamente</p>
+      <h1 class="ap-go__title">Golpe de Oro</h1>
+      <p class="ap-go__lead">
+        La primera pala de pádel de Aljarah Sol. Carbono, detalles en oro y un grip dorado pensado para no soltarla.
+      </p>
+    </div>
+
+    <div class="ap-go__palas">
+      {%- for ap_go_img in (1..2) -%}
+        {%- if forloop.first -%}
+          {%- assign ap_go_pic = ap_go_negro -%}
+          {%- assign ap_go_name = 'Negro y oro' -%}
+        {%- else -%}
+          {%- assign ap_go_pic = ap_go_blanco -%}
+          {%- assign ap_go_name = 'Blanco y oro' -%}
+        {%- endif -%}
+        <figure class="ap-go__pala">
+          <span class="ap-go__img">
+            {%- if ap_go_pic != blank -%}
+              <img
+                src="{{ ap_go_pic | image_url: width: 900 }}"
+                srcset="{{ ap_go_pic | image_url: width: 450 }} 450w, {{ ap_go_pic | image_url: width: 900 }} 900w"
+                sizes="(min-width: 750px) 36rem, 50vw"
+                alt="{{ ap_go_pic.alt | escape }}"
+                width="900"
+                height="1206"
+                {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+              >
+            {%- endif -%}
+          </span>
+          <figcaption>{{ ap_go_name }}</figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+
+    <ul class="ap-go__feat" role="list">
+      <li><strong>Carbono 3K</strong><span>Cara de carbono con acabado brillante</span></li>
+      <li><strong>Grip dorado</strong><span>Con puntos antideslizantes para más agarre</span></li>
+      <li><strong>Dos acabados</strong><span>Negro y oro o blanco y oro</span></li>
+    </ul>
+
+    <div class="ap-go__signup" id="avisame">
+      <h2 class="ap-go__subtitle">Sé la primera en tenerla</h2>
+      <p class="ap-go__note">
+        Todavía no está a la venta. Apúntate y te avisamos por email en cuanto salga.
+      </p>
+
+      {%- form 'customer', id: 'ApGolpeForm', class: 'ap-go__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter,golpe-de-oro">
+        {%- if form.posted_successfully? -%}
+          <p class="ap-go__msg ap-go__msg--ok" role="status" tabindex="-1" autofocus>
+            ¡Lista! Te avisaremos en cuanto la Golpe de Oro esté disponible.
+          </p>
+        {%- else -%}
+          <div class="ap-go__field">
+            <label class="visually-hidden" for="ApGolpeEmail">Tu email</label>
+            <input
+              id="ApGolpeEmail"
+              type="email"
+              name="contact[email]"
+              value="{{ form.email }}"
+              placeholder="Tu email"
+              autocomplete="email"
+              autocorrect="off"
+              autocapitalize="off"
+              required
+              {% if form.errors %}
+                aria-invalid="true" aria-describedby="ApGolpeError"
+              {% endif %}
+            >
+            <button type="submit" class="ap-go__btn">Avísame</button>
+          </div>
+          {%- if form.errors -%}
+            <div class="ap-go__msg ap-go__msg--err" id="ApGolpeError" role="alert">
+              {{- form.errors | default_errors -}}
+            </div>
+          {%- endif -%}
+          <p class="ap-go__legal">
+            Al apuntarte aceptas recibir emails de Aljarah Sol sobre la Golpe de Oro y otras novedades. Puedes darte de
+            baja cuando quieras. Más información en nuestra
+            <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">política de privacidad</a>.
+          </p>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .ap-go { background: rgb(43, 36, 32); color: #f7f3ec; padding: 5.6rem 0 6.4rem; }
+  .ap-go__head { text-align: center; max-width: 64rem; margin: 0 auto 3.2rem; }
+  .ap-go__cap { margin: 0 0 1.2rem; font-size: 1.1rem; letter-spacing: .32em; text-transform: uppercase; color: rgb(184, 154, 94); }
+  .ap-go__title { margin: 0; font-family: var(--font-heading-family); font-weight: 400; font-size: calc(var(--font-heading-scale) * 4.4rem); line-height: 1.05; color: #f7f3ec; }
+  .ap-go__lead { margin: 1.6rem 0 0; font-size: 1.5rem; line-height: 1.6; color: rgba(247, 243, 236, .78); }
+  .ap-go__palas { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 76rem; margin: 0 auto; }
+  .ap-go__pala { margin: 0; }
+  .ap-go__img { display: block; aspect-ratio: 3 / 4; overflow: hidden; background: #fff; }
+  .ap-go__img img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .ap-go__pala figcaption { padding-top: 1rem; text-align: center; font-size: 1.1rem; letter-spacing: .24em; text-transform: uppercase; color: rgb(184, 154, 94); }
+  .ap-go__feat { display: grid; gap: 1.6rem; max-width: 76rem; margin: 3.6rem auto 0; padding: 0; list-style: none; text-align: center; }
+  .ap-go__feat li { display: flex; flex-direction: column; gap: .4rem; padding: 1.6rem; border: 1px solid rgba(184, 154, 94, .35); }
+  .ap-go__feat strong { font-weight: 500; font-size: 1.2rem; letter-spacing: .2em; text-transform: uppercase; color: rgb(184, 154, 94); }
+  .ap-go__feat span { font-size: 1.4rem; color: rgba(247, 243, 236, .78); }
+  .ap-go__signup { max-width: 56rem; margin: 4.4rem auto 0; text-align: center; }
+  .ap-go__subtitle { margin: 0; font-family: var(--font-heading-family); font-weight: 400; font-size: calc(var(--font-heading-scale) * 2.8rem); color: #f7f3ec; }
+  .ap-go__note { margin: 1rem 0 2rem; font-size: 1.45rem; line-height: 1.55; color: rgba(247, 243, 236, .78); }
+  .ap-go__field { display: flex; gap: .8rem; }
+  .ap-go__field input { flex: 1; min-width: 0; min-height: 4.8rem; padding: 0 1.4rem; border: 1px solid rgba(184, 154, 94, .6); background: transparent; color: #f7f3ec; font: inherit; font-size: 1.5rem; }
+  .ap-go__field input::placeholder { color: rgba(247, 243, 236, .55); }
+  .ap-go__field input:focus { outline: 2px solid rgb(184, 154, 94); outline-offset: 1px; }
+  .ap-go__btn { flex: 0 0 auto; min-height: 4.8rem; padding: 0 2.4rem; border: 0; background: rgb(184, 154, 94); color: rgb(43, 36, 32); font-family: var(--font-body-family); font-size: 1.2rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
+  .ap-go__btn:hover { background: #cdb07a; }
+  .ap-go__msg { margin: 1.2rem 0 0; font-size: 1.45rem; }
+  .ap-go__msg--ok { margin: 0; padding: 1.4rem; border: 1px solid rgb(184, 154, 94); color: #f7f3ec; }
+  .ap-go__msg--err { color: #f2b8a8; }
+  .ap-go__legal { margin: 1.4rem 0 0; font-size: 1.15rem; line-height: 1.5; color: rgba(247, 243, 236, .6); }
+  .ap-go__legal a { color: inherit; text-underline-offset: .3rem; }
+  @media screen and (min-width: 750px) {
+    .ap-go { padding: 8rem 0 9rem; }
+    .ap-go__title { font-size: calc(var(--font-heading-scale) * 6.4rem); }
+    .ap-go__lead { font-size: 1.7rem; }
+    .ap-go__palas { gap: 3.2rem; }
+    .ap-go__feat { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Próximamente Golpe de Oro",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Próximamente Golpe de Oro"
+    }
+  ]
+}
+{% endschema %}

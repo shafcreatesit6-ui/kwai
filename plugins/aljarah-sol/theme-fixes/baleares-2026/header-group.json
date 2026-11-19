@@ -1,0 +1,134 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "aj-style": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{{ 'aljarah-maison.css' | asset_url | stylesheet_tag }}<style>.utility-bar .announcement-bar-slider.slider-buttons{display:flex!important;}.ap-pay{display:flex;flex-wrap:wrap;gap:.6rem;list-style:none;margin:1.6rem 0 0;padding:0}.ap-pay svg{display:block;width:3.8rem;height:2.4rem}</style><script src=\"{{ 'ap-cart.js' | asset_url }}\" defer></script>",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "a1": {
+          "type": "announcement",
+          "settings": {
+            "text": "Envío gratis a la península desde 35 €",
+            "link": "shopify://collections/all"
+          }
+        },
+        "a2": {
+          "type": "announcement",
+          "settings": {
+            "text": "Envío con seguimiento",
+            "link": ""
+          }
+        },
+        "a3": {
+          "type": "announcement",
+          "settings": {
+            "text": "14 días para desistir",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "settings": {
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "color_scheme": "scheme-3",
+        "show_line_separator": false,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_position": "top-center",
+        "mobile_logo_position": "center",
+        "menu": "main-menu",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "color_scheme": "scheme-1",
+        "menu_color_scheme": "scheme-1",
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "margin_bottom": 0,
+        "padding_top": 20,
+        "padding_bottom": 16
+      }
+    },
+    "halloween-ticker": {
+      "type": "ap-ticker",
+      "blocks": {
+        "t1": {
+          "type": "item",
+          "settings": {
+            "text": "Halloween Sale: 25% de descuento en todo"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "text": "Código HALLOWEEN25"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "text": "Solo hasta el 1 de noviembre"
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "text": "Envío gratis a la península desde 35 €"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ],
+      "settings": {
+        "enable": true,
+        "end_ts": "1793573999",
+        "label": "Promoción de Halloween",
+        "link": "/discount/HALLOWEEN25?redirect=/collections/all",
+        "separator": "🎃",
+        "speed": 36,
+        "bg": "#14100d",
+        "fg": "#f7f3ec",
+        "accent": "#f28c28"
+      }
+    }
+  },
+  "order": [
+    "aj-style",
+    "halloween-ticker",
+    "announcement-bar",
+    "header"
+  ]
+}
