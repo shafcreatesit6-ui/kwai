@@ -129,6 +129,10 @@
   .ap-rv__thumbs img { width: 100%; height: 100%; object-fit: contain; display: block; }
   .ap-rv__order { margin: .8rem 0 0; font-size: 1.2rem; letter-spacing: .18em; text-transform: uppercase; color: #b89a5e; text-align: center; }
   .jdgm-write-review-modal__nav-btn, .jdgm-write-review-modal__btn { border-radius: 0 !important; letter-spacing: .14em !important; }
+  .ap-rv-cta { display: inline-flex; align-items: center; gap: .8rem; margin: .2rem 0 .6rem; padding: .4rem 0; border: 0; background: none; color: inherit; font: inherit; font-size: 1.3rem; cursor: pointer; text-align: left; }
+  .ap-rv-cta__stars { color: #b89a5e; font-size: 1.6rem; letter-spacing: .12em; line-height: 1; }
+  .ap-rv-cta__txt { text-decoration: underline; text-underline-offset: .35rem; }
+  .jdgm-prev-badge { cursor: pointer; }
 </style>
 <script>
   (function () {
@@ -228,6 +232,48 @@
       });
     });
     obs.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
+
+    // 19.28: altijd een reviewknop onder de titel (Judge.me verbergt de sterren bij 0 reviews)
+    function reviewsSection() {
+      return [].filter.call(document.querySelectorAll('.shopify-section'), function (x) { return x.querySelector('.jdgm-review-widget, .jdgm-rev-widg'); })[0];
+    }
+    function openWrite() {
+      var sec = reviewsSection();
+      if (sec) sec.style.setProperty('display', 'block', 'important');
+      var k = 0, iv = setInterval(function () {
+        k++;
+        var b = [].filter.call(document.querySelectorAll('.jm-action-buttons__button, .jdgm-write-rev-link, button, a'), function (e) {
+          return e.offsetParent !== null && !e.closest('.ap-rv-cta') && /escribir una rese|write a review/i.test(e.textContent);
+        })[0];
+        if (b) { clearInterval(iv); b.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(function () { b.click(); }, 650); }
+        if (k > 40) clearInterval(iv);
+      }, 300);
+    }
+    function goReviews() {
+      var sec = reviewsSection();
+      if (sec) { sec.style.setProperty('display', 'block', 'important'); sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    }
+    function addCta() {
+      if (document.querySelector('.ap-rv-cta')) return true;
+      var badge = document.querySelector('main .jdgm-prev-badge');
+      if (!badge || badge.closest('quick-add-modal')) return false;
+      var host = badge.closest('.shopify-app-block, .shopify-block') || badge;
+      var count = parseInt(badge.getAttribute('data-number-of-reviews') || '0', 10) || 0;
+      var el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'ap-rv-cta quick-add-hidden';
+      el.innerHTML = count
+        ? '<span class="ap-rv-cta__txt">Escribir una reseña</span>'
+        : '<span class="ap-rv-cta__stars" aria-hidden="true">☆☆☆☆☆</span><span class="ap-rv-cta__txt">Escribe la primera reseña</span>';
+      el.addEventListener('click', openWrite);
+      host.insertAdjacentElement('afterend', el);
+      // sterren (als er reviews zijn) klikbaar naar het reviewblok
+      badge.addEventListener('click', function (e) { e.preventDefault(); goReviews(); });
+      return true;
+    }
+    if (!addCta()) {
+      var tries = 0, ct = setInterval(function () { tries++; if (addCta() || tries > 30) clearInterval(ct); }, 400);
+    }
 
     if (!isLink) return;
     var n = 0, opened = false;

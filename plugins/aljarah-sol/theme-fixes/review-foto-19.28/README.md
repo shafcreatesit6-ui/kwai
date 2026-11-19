@@ -17,3 +17,9 @@ Review-links voor de collab-modellen:
 - **Foto's:** hele, niet bijgesneden foto's van de gekozen kleur (alt-tekst met de kleurnaam), met kleine foto's eronder om te wisselen.
 - **Bestelling:** "Tu pedido: Negro · S" onder de productnaam als de link een variant bevat.
 - **Ook zonder link:** elke klant die "Escribir una reseña" opent krijgt dezelfde stijl en foto's.
+
+## Update: altijd een reviewknop
+- Onder de titel staat altijd "☆☆☆☆☆ Escribe la primera reseña" (bij 0 reviews), of "Escribir una reseña" als er al reviews zijn.
+- Een klik maakt het reviewblok zichtbaar en opent het formulier.
+- Judge.me verbergt zijn eigen sterren bij 0 reviews.
+- Zodra er reviews zijn, springen de sterren van Judge.me met een klik naar het reviewblok.
