@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "ap-proximamente",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

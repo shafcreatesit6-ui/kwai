@@ -1,0 +1,378 @@
+{%- comment -%}
+  AP: Guía de tallas (thema 19.20) + "Encuentra tu talla" (thema 19.23).
+  Knop onder de maatkeuze + dialoog.
+  Tabel en context komen uit de productbeschrijving (<h3>Guía de tallas</h3> … <table>).
+  Metafield custom.ap_talla_eu (json, bv. {"S":"34","M":"36–38"}):
+    - extra kolom "Talla EU" in de tabel (als die er nog niet is)
+    - de maatzoeker: talla habitual (ES) of medidas (cm) -> talla van dit model.
+      Medidas gaan eerst naar een Spaanse standaardtabel (lichaamsmaten), daarna via de EU-map naar de maat.
+  De CSS voor de EU-maat op de maatknoppen (zie product-variant-options) staat hier ook, buiten de if.
+  Accepts: product
+{%- endcomment -%}
+<style>
+  .product-form__input input[type='radio'] + label.ap-eu-label { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-width: 5.6rem; padding-top: .7rem; padding-bottom: .7rem; line-height: 1.1; }
+  .ap-eu { margin-top: .25rem; font-size: 1.05rem; font-weight: 400; letter-spacing: .04em; opacity: .62; }
+</style>
+{%- assign ap_sg_parts = product.description | split: '<table' -%}
+{%- if ap_sg_parts.size > 1 -%}
+  {%- assign ap_sg_table = ap_sg_parts[1] | split: '</table>' | first | prepend: '<table' | append: '</table>' -%}
+  {%- assign ap_sg_context = '' -%}
+  {%- assign ap_sg_sections = product.description | split: '<h3>Guía de tallas</h3>' -%}
+  {%- if ap_sg_sections.size > 1 -%}
+    {%- assign ap_sg_context = ap_sg_sections[1] | split: '<table' | first -%}
+  {%- endif -%}
+  {%- assign ap_sg_kind = '' -%}
+  {%- if ap_sg_context contains 'Tabla orientativa' -%}
+    {%- assign ap_sg_kind = 'Equivalencia orientativa de tallas (ES)' -%}
+  {%- elsif ap_sg_context contains 'de la prenda' -%}
+    {%- assign ap_sg_kind = 'Medidas de la prenda sin estirar · el tejido se adapta a tu cuerpo' -%}
+  {%- elsif ap_sg_context contains 'del cuerpo' -%}
+    {%- assign ap_sg_kind = 'Medidas del cuerpo · compáralas con las tuyas' -%}
+  {%- endif -%}
+  {%- assign ap_sg_eu = product.metafields.custom.ap_talla_eu.value -%}
+  <div class="ap-sg-link">
+    <button type="button" class="ap-sg-link__btn" data-ap-sg-open aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15.5 15.5 3 21 8.5 8.5 21z"/><path d="M7 11.5l1.8 1.8M9.8 8.7l1.2 1.2M12.6 5.9l1.8 1.8M10.4 14.1l1.2 1.2"/></svg>
+      {{ 'products.size_guide.title' | t }}
+    </button>
+    {%- if ap_sg_eu != blank -%}
+      <button type="button" class="ap-sg-link__btn ap-sg-link__btn--find" data-ap-sg-open data-ap-sg-find aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5.5 5.5"/></svg>
+        Encuentra tu talla
+      </button>
+    {%- else -%}
+      <span class="ap-sg-link__tip">{{ 'products.size_guide.tip' | t }}</span>
+    {%- endif -%}
+  </div>
+  <dialog class="ap-sg" data-ap-sg aria-labelledby="ApSgTitle-{{ product.id }}"{% if ap_sg_eu != blank %} data-ap-sg-eu="{{ ap_sg_eu | json | escape }}"{% endif %}>
+    <div class="ap-sg__head">
+      <p class="ap-sg__title" id="ApSgTitle-{{ product.id }}">{{ 'products.size_guide.title' | t }}</p>
+      <button type="button" class="ap-sg__close" data-ap-sg-close aria-label="{{ 'accessibility.close' | t | escape }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <p class="ap-sg__sub">{{ product.title | split: ' – ' | first | escape }}</p>
+
+    {%- if ap_sg_eu != blank -%}
+      <div class="ap-sf" data-ap-sf>
+        <p class="ap-sf__title">Encuentra tu talla</p>
+        <div class="ap-sf__tabs" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-ap-sf-tab="es">Mi talla habitual</button>
+          <button type="button" role="tab" aria-selected="false" data-ap-sf-tab="cm">Mis medidas</button>
+        </div>
+        <div class="ap-sf__pane" data-ap-sf-pane="es" role="tabpanel">
+          <p class="ap-sf__q">¿Qué talla usas normalmente en tiendas españolas?</p>
+          <div class="ap-sf__chips" data-ap-sf-chips></div>
+        </div>
+        <div class="ap-sf__pane" data-ap-sf-pane="cm" role="tabpanel" hidden>
+          <p class="ap-sf__q">Escribe tus medidas en cm. Con una basta, pero cuantas más, mejor.</p>
+          <div class="ap-sf__fields">
+            <label>Pecho<input type="number" inputmode="numeric" min="60" max="160" placeholder="88" data-ap-sf-cm="0"></label>
+            <label>Cintura<input type="number" inputmode="numeric" min="45" max="150" placeholder="70" data-ap-sf-cm="1"></label>
+            <label>Cadera<input type="number" inputmode="numeric" min="65" max="170" placeholder="96" data-ap-sf-cm="2"></label>
+          </div>
+          <button type="button" class="ap-sf__go" data-ap-sf-calc>Calcular mi talla</button>
+        </div>
+        <div class="ap-sf__res" data-ap-sf-res aria-live="polite" hidden></div>
+      </div>
+    {%- else -%}
+      <div class="ap-sg__intro">
+        <p class="ap-sg__intro-title">¿Cuál es tu talla?</p>
+        <p>Mídete con una cinta métrica y compara tus medidas con la tabla. <strong>Si dudas entre dos tallas, elige la más grande.</strong></p>
+      </div>
+    {%- endif -%}
+
+    <p class="ap-sg__h">Tabla de tallas <span>(cm)</span></p>
+    {%- if ap_sg_kind != blank -%}<p class="ap-sg__kind">{{ ap_sg_kind }}</p>{%- endif -%}
+    <div class="ap-sg__table">{{ ap_sg_table }}</div>
+    {%- if ap_sg_context != blank -%}
+      <div class="ap-sg__note">{{ ap_sg_context }}</div>
+    {%- endif -%}
+
+    <p class="ap-sg__h">Cómo medirte</p>
+    <ol class="ap-sg__steps">
+      <li><strong>Pecho</strong> Pasa la cinta por debajo de los brazos y rodea la parte más llena del pecho. Que quede recta y sin apretar; respira con normalidad.</li>
+      <li><strong>Cintura</strong> Rodea la parte más estrecha de tu cintura, normalmente un poco por encima del ombligo.</li>
+      <li><strong>Cadera</strong> Con los pies juntos, mide la parte más ancha de las caderas y los glúteos, con la cinta paralela al suelo.</li>
+    </ol>
+    <p class="ap-sg__help">{{ 'products.size_guide.help_html' | t }}</p>
+  </dialog>
+  <style>
+    .ap-sg-link { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 2rem; margin: -.6rem 0 .4rem; }
+    .ap-sg-link__btn { display: inline-flex; align-items: center; gap: .6rem; padding: .4rem 0; border: 0; background: none; color: inherit; font: inherit; font-size: 1.35rem; text-decoration: underline; text-underline-offset: .35rem; cursor: pointer; }
+    .ap-sg-link__btn svg { width: 1.8rem; height: 1.8rem; fill: none; stroke: currentColor; stroke-width: 1.3; }
+    .ap-sg-link__btn--find { font-weight: 600; }
+    .ap-sg-link__tip { font-size: 1.25rem; opacity: .7; }
+    .ap-sg { position: fixed; inset: 0; margin: auto; height: fit-content; width: min(68rem, calc(100% - 2.4rem)); max-height: 88vh; overflow: auto; padding: 2.4rem 2.4rem 2.8rem; border: 0; background: rgb(var(--color-background)); color: rgb(var(--color-foreground)); box-shadow: 0 2rem 6rem rgba(0,0,0,.25); }
+    .ap-sg::backdrop { background: rgba(31,26,22,.55); }
+    .ap-sg__head { display: flex; justify-content: space-between; align-items: center; }
+    .ap-sg__title { margin: 0; font-family: var(--font-heading-family); font-size: 2.6rem; font-weight: 300; }
+    .ap-sg__close { width: 4rem; height: 4rem; border: 0; background: none; cursor: pointer; color: inherit; display: grid; place-items: center; }
+    .ap-sg__close svg { width: 1.8rem; height: 1.8rem; stroke: currentColor; stroke-width: 1.4; fill: none; }
+    .ap-sg__sub { margin: .2rem 0 1.6rem; font-size: 1.3rem; opacity: .7; }
+    .ap-sg__intro { padding: 1.6rem 1.8rem; background: rgba(184,154,94,.14); border-left: 3px solid rgb(184,154,94); }
+    .ap-sg__intro p { margin: 0; font-size: 1.4rem; line-height: 1.55; }
+    .ap-sg__intro .ap-sg__intro-title { margin-bottom: .4rem; font-family: var(--font-heading-family); font-size: 2rem; font-weight: 400; }
+    .ap-sg__h { margin: 2.4rem 0 .6rem; padding-bottom: .6rem; border-bottom: 1px solid rgba(184,154,94,.5); font-size: 1.25rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    .ap-sg__h span { font-weight: 400; letter-spacing: .04em; text-transform: none; opacity: .7; }
+    .ap-sg__kind { margin: 0 0 1rem; font-size: 1.3rem; opacity: .8; }
+    .ap-sg__table { overflow-x: auto; }
+    .ap-sg__table table { width: 100%; border-collapse: collapse; font-size: 1.35rem; text-align: center; }
+    .ap-sg__table th, .ap-sg__table td { padding: .9rem .8rem; border-bottom: 1px solid rgba(var(--color-foreground), .12); }
+    .ap-sg__table tr:first-child th, .ap-sg__table thead th { font-weight: 500; background: rgba(184,154,94,.12); }
+    .ap-sg__table tr > :first-child { font-weight: 600; }
+    .ap-sg__table .ap-sg__eu { font-weight: 600; background: rgba(184,154,94,.08); }
+    .ap-sg__table th.ap-sg__eu { background: rgba(184,154,94,.24); }
+    .ap-sg__table tr.is-ap-pick > * { background: rgba(184,154,94,.28); }
+    .ap-sg__note { margin: 1.2rem 0 0; font-size: 1.3rem; line-height: 1.5; opacity: .85; }
+    .ap-sg__note p { margin: 0; }
+    .ap-sg__steps { margin: 1rem 0 0; padding: 0; list-style: none; counter-reset: apsg; display: grid; gap: 1.2rem; }
+    .ap-sg__steps li { position: relative; padding-left: 3.6rem; font-size: 1.35rem; line-height: 1.55; counter-increment: apsg; }
+    .ap-sg__steps li::before { content: counter(apsg); position: absolute; left: 0; top: .1rem; width: 2.4rem; height: 2.4rem; border-radius: 50%; background: rgb(43,36,32); color: #f7f3ec; font-size: 1.2rem; display: grid; place-items: center; }
+    .ap-sg__steps strong { display: block; font-weight: 600; }
+    .ap-sg__help { margin: 2rem 0 0; padding-top: 1.4rem; border-top: 1px solid rgba(var(--color-foreground), .1); font-size: 1.3rem; line-height: 1.5; opacity: .85; }
+
+    .ap-sf { padding: 1.8rem 1.8rem 2rem; background: rgba(184,154,94,.12); border-left: 3px solid rgb(184,154,94); }
+    .ap-sf__title { margin: 0 0 1.2rem; font-family: var(--font-heading-family); font-size: 2.1rem; font-weight: 400; }
+    .ap-sf__tabs { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 1.4rem; border: 1px solid rgb(43,36,32); }
+    .ap-sf__tabs button { min-height: 4.2rem; padding: .6rem 1rem; border: 0; background: transparent; color: rgb(43,36,32); font: inherit; font-size: 1.15rem; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
+    .ap-sf__tabs button[aria-selected='true'] { background: rgb(43,36,32); color: #f7f3ec; }
+    .ap-sf__q { margin: 0 0 1rem; font-size: 1.4rem; line-height: 1.5; }
+    .ap-sf__chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .ap-sf__chips button { min-width: 5.2rem; min-height: 4.4rem; padding: .4rem 1rem; border: 1px solid rgba(43,36,32,.35); background: rgb(var(--color-background)); color: rgb(43,36,32); font: inherit; font-size: 1.45rem; cursor: pointer; }
+    .ap-sf__chips button[aria-pressed='true'] { border-color: rgb(43,36,32); background: rgb(43,36,32); color: #f7f3ec; }
+    .ap-sf__fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+    .ap-sf__fields label { display: flex; flex-direction: column; gap: .4rem; font-size: 1.2rem; letter-spacing: .08em; text-transform: uppercase; }
+    .ap-sf__fields input { width: 100%; min-height: 4.4rem; padding: .6rem 1rem; border: 1px solid rgba(43,36,32,.35); background: rgb(var(--color-background)); color: rgb(43,36,32); font: inherit; font-size: 1.6rem; letter-spacing: 0; text-transform: none; }
+    .ap-sf__go, .ap-sf__pick { display: inline-flex; align-items: center; justify-content: center; min-height: 4.6rem; margin-top: 1.2rem; padding: 0 2.4rem; border: 0; background: rgb(43,36,32); color: #fff; font: inherit; font-size: 1.15rem; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
+    .ap-sf__btns { display: flex; flex-wrap: wrap; gap: .8rem; }
+    .ap-sf__btns .ap-sf__pick { margin-top: 1.2rem; }
+    .ap-sf__pick--alt { background: transparent !important; color: rgb(43,36,32) !important; box-shadow: inset 0 0 0 1px rgb(43,36,32); }
+    .ap-sf__res { margin-top: 1.6rem; padding-top: 1.4rem; border-top: 1px solid rgba(184,154,94,.6); }
+    .ap-sf__res[hidden] { display: none; }
+    .ap-sf__big { margin: 0; font-size: 1.6rem; line-height: 1.45; }
+    .ap-sf__big strong { font-family: var(--font-heading-family); font-size: 2.8rem; font-weight: 400; }
+    .ap-sf__msg { margin: .6rem 0 0; font-size: 1.35rem; line-height: 1.5; }
+    .ap-sf__small { margin: .8rem 0 0; font-size: 1.2rem; opacity: .7; }
+    .ap-sf__err { margin: 1rem 0 0; font-size: 1.3rem; color: #a3322a; }
+    @media screen and (max-width: 749px) {
+      .ap-sg { padding: 2rem 1.6rem 2.4rem; }
+      .ap-sg__table table { font-size: 1.2rem; }
+      .ap-sg__table th, .ap-sg__table td { padding: .7rem .25rem; }
+      .ap-sf { padding: 1.6rem 1.4rem 1.8rem; }
+      .ap-sf__tabs button { font-size: 1.05rem; letter-spacing: .1em; }
+      .ap-sf__go, .ap-sf__pick { width: 100%; }
+    }
+  </style>
+  <script>
+    (function () {
+      function addEu(dlg) {
+        if (!dlg || dlg.dataset.apSgEuDone) return;
+        dlg.dataset.apSgEuDone = '1';
+        var raw = dlg.getAttribute('data-ap-sg-eu');
+        var table = dlg.querySelector('.ap-sg__table table');
+        if (!raw || !table || !table.rows.length) return;
+        var map; try { map = JSON.parse(raw); } catch (e) { return; }
+        var head = table.rows[0];
+        if (/\bEU\b|equival/i.test(head.textContent)) return;
+        for (var i = 0; i < table.rows.length; i++) {
+          var row = table.rows[i], first = row.cells[0];
+          if (!first) continue;
+          var cell = document.createElement(i === 0 ? 'th' : 'td');
+          cell.className = 'ap-sg__eu';
+          if (i === 0) { cell.innerHTML = 'Talla EU<br><small>aprox.</small>'; }
+          else { var k = first.textContent.trim().toUpperCase(); cell.textContent = map[k] || map[first.textContent.trim()] || '–'; }
+          first.insertAdjacentElement('afterend', cell);
+        }
+      }
+
+      /* ---------- Encuentra tu talla ---------- */
+      // Spaanse standaardmaten (lichaam, cm): pecho, cintura, cadera.
+      var ES = [[32, 76, 58, 84], [34, 80, 62, 88], [36, 84, 66, 92], [38, 88, 70, 96], [40, 92, 74, 100], [42, 96, 78, 104],
+                [44, 100, 82, 108], [46, 104, 86, 112], [48, 108, 90, 116], [50, 112, 94, 120], [52, 116, 98, 124]];
+      var LIMITS = [[60, 160], [45, 150], [65, 170]];
+
+      function store(v) { try { if (v) localStorage.setItem('ap-sf', JSON.stringify(v)); else return JSON.parse(localStorage.getItem('ap-sf') || 'null'); } catch (e) { return null; } }
+
+      function sizes(dlg) {
+        var map; try { map = JSON.parse(dlg.getAttribute('data-ap-sg-eu') || '{}'); } catch (e) { return []; }
+        var out = [];
+        Object.keys(map).forEach(function (k) {
+          var n = String(map[k]).match(/\d+/g);
+          if (n) out.push({ name: k, eu: String(map[k]), lo: +n[0], hi: +n[n.length - 1] });
+        });
+        return out.sort(function (a, b) { return a.lo - b.lo || a.hi - b.hi; });
+      }
+
+      function esFromCm(vals) {
+        var u = 0, any = false;
+        for (var i = 0; i < 3; i++) {
+          var v = vals[i];
+          if (!v) continue;
+          any = true;
+          var hit = null; // 1 cm marge: 85 cm pecho telt nog als 84
+          for (var j = 0; j < ES.length; j++) { if (ES[j][i + 1] + 1 >= v) { hit = ES[j][0]; break; } }
+          u = Math.max(u, hit === null ? 54 : hit);
+        }
+        return any ? u : null;
+      }
+
+      function recommend(list, u) {
+        if (!list.length) return null;
+        var hit = list.filter(function (s) { return s.lo <= u && u <= s.hi; });
+        if (hit.length > 1) return { s: hit[hit.length - 1], alt: hit[hit.length - 2] };
+        if (hit.length) return { s: hit[0] };
+        if (u < list[0].lo) return { s: list[0], small: true };
+        if (u > list[list.length - 1].hi) return { s: null, big: true };
+        for (var i = 0; i < list.length; i++) if (list[i].lo > u) return { s: list[i], gap: true };
+        return null;
+      }
+
+      function sizeSets() {
+        return [].filter.call(document.querySelectorAll('main variant-selects fieldset'), function (f) {
+          var l = f.querySelector('legend');
+          return l && /talla|size/i.test(l.textContent) && !f.closest('quick-add-modal');
+        });
+      }
+
+      function pickSize(name) {
+        sizeSets().forEach(function (f) {
+          [].some.call(f.querySelectorAll('input[type="radio"]'), function (r) {
+            if (r.value !== name) return false;
+            var lab = f.querySelector('label[for="' + r.id + '"]');
+            if (lab) lab.click(); else r.click();
+            return true;
+          });
+        });
+      }
+
+      function show(dlg, u) {
+        var res = dlg.querySelector('[data-ap-sf-res]');
+        var r = recommend(sizes(dlg), u);
+        [].forEach.call(dlg.querySelectorAll('.ap-sg__table tr'), function (tr) { tr.classList.remove('is-ap-pick'); });
+        if (!r) { res.hidden = true; return; }
+        var html;
+        if (r.big) {
+          html = '<p class="ap-sf__big">Este modelo no llega a tu talla (ES ' + u + ').</p>' +
+            '<p class="ap-sf__msg">Escríbenos a <a href="mailto:hola@aljarahsol.com">hola@aljarahsol.com</a> y te ayudamos a encontrar algo para ti.</p>';
+        } else {
+          var can = sizeSets().length > 0;
+          function btn(s, ghost) { return can ? '<button type="button" class="ap-sf__pick' + (ghost ? ' ap-sf__pick--alt' : '') + '" data-ap-sf-pick="' + s.name.replace(/"/g, '') + '">Elegir talla ' + s.name + '</button>' : ''; }
+          if (r.alt) {
+            html = '<p class="ap-sf__big">Tu talla en este modelo: <strong>' + r.alt.name + ' o ' + r.s.name + '</strong></p>' +
+              '<p class="ap-sf__msg">Estás entre dos tallas. Si te gusta ceñido, elige la <b>' + r.alt.name + '</b> (ES ' + r.alt.eu + '); para ir más cómoda, la <b>' + r.s.name + '</b> (ES ' + r.s.eu + '). Si dudas, la más grande.</p>' +
+              '<div class="ap-sf__btns">' + btn(r.s) + btn(r.alt, true) + '</div>';
+          } else {
+            var note = r.small ? 'Es la talla más pequeña de este modelo: puede quedarte algo holgada.'
+              : r.gap ? 'Tu talla queda entre dos de este modelo: te recomendamos la más grande.'
+              : 'Corresponde a tu talla según la tabla de este modelo.';
+            html = '<p class="ap-sf__big">Tu talla en este modelo: <strong>' + r.s.name + '</strong> <span>(ES ' + r.s.eu + ')</span></p>' +
+              '<p class="ap-sf__msg">' + note + '</p>' + btn(r.s);
+          }
+          html +=
+'<p class="ap-sf__small">Recomendación orientativa según la tabla de este modelo.</p>';
+          [].forEach.call(dlg.querySelectorAll('.ap-sg__table tr'), function (tr) {
+            var c = tr.cells[0];
+            var k = c && c.tagName === 'TD' ? c.textContent.trim().toUpperCase() : '';
+            if (k && (k === r.s.name.toUpperCase() || (r.alt && k === r.alt.name.toUpperCase()))) tr.classList.add('is-ap-pick');
+          });
+        }
+        res.innerHTML = html;
+        res.hidden = false;
+      }
+
+      function tab(dlg, which) {
+        [].forEach.call(dlg.querySelectorAll('[data-ap-sf-tab]'), function (b) { b.setAttribute('aria-selected', b.dataset.apSfTab === which ? 'true' : 'false'); });
+        [].forEach.call(dlg.querySelectorAll('[data-ap-sf-pane]'), function (p) { p.hidden = p.dataset.apSfPane !== which; });
+      }
+
+      function initFinder(dlg) {
+        var box = dlg && dlg.querySelector('[data-ap-sf]');
+        if (!box || box.dataset.ready) return;
+        box.dataset.ready = '1';
+        var list = sizes(dlg);
+        if (!list.length) { box.hidden = true; return; }
+        var from = Math.max(30, Math.floor((list[0].lo - 2) / 2) * 2);
+        var to = Math.min(56, Math.ceil((list[list.length - 1].hi + 2) / 2) * 2);
+        var chips = box.querySelector('[data-ap-sf-chips]');
+        for (var n = from; n <= to; n += 2) {
+          var b = document.createElement('button');
+          b.type = 'button'; b.textContent = n; b.dataset.apSfEs = n; b.setAttribute('aria-pressed', 'false');
+          chips.appendChild(b);
+        }
+        var saved = store();
+        if (saved && saved.mode === 'cm' && saved.cm) {
+          tab(dlg, 'cm');
+          [].forEach.call(box.querySelectorAll('[data-ap-sf-cm]'), function (i) { var v = saved.cm[+i.dataset.apSfCm]; if (v) i.value = v; });
+          var u = esFromCm(saved.cm); if (u) show(dlg, u);
+        } else if (saved && saved.es) {
+          var c = chips.querySelector('[data-ap-sf-es="' + saved.es + '"]');
+          if (c) c.setAttribute('aria-pressed', 'true');
+          show(dlg, +saved.es);
+        }
+      }
+
+      function onFinderClick(e, dlg) {
+        var t = e.target, b;
+        if ((b = t.closest('[data-ap-sf-tab]'))) { tab(dlg, b.dataset.apSfTab); return true; }
+        if ((b = t.closest('[data-ap-sf-es]'))) {
+          [].forEach.call(dlg.querySelectorAll('[data-ap-sf-es]'), function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+          store({ mode: 'es', es: +b.dataset.apSfEs });
+          show(dlg, +b.dataset.apSfEs);
+          return true;
+        }
+        if (t.closest('[data-ap-sf-calc]')) {
+          var vals = [0, 0, 0], bad = false;
+          [].forEach.call(dlg.querySelectorAll('[data-ap-sf-cm]'), function (i) {
+            var k = +i.dataset.apSfCm, v = parseFloat(String(i.value).replace(',', '.'));
+            if (!i.value) return;
+            if (isNaN(v) || v < LIMITS[k][0] || v > LIMITS[k][1]) bad = true; else vals[k] = v;
+          });
+          var res = dlg.querySelector('[data-ap-sf-res]');
+          var u = bad ? null : esFromCm(vals);
+          if (!u) {
+            res.innerHTML = '<p class="ap-sf__err">' + (bad ? 'Revisa tus medidas: escríbelas en centímetros.' : 'Escribe al menos una medida.') + '</p>';
+            res.hidden = false;
+            return true;
+          }
+          store({ mode: 'cm', cm: vals });
+          show(dlg, u);
+          return true;
+        }
+        if ((b = t.closest('[data-ap-sf-pick]'))) {
+          pickSize(b.dataset.apSfPick);
+          if (dlg.close) dlg.close(); else dlg.removeAttribute('open');
+          var vs = document.querySelector('main variant-selects');
+          if (vs) vs.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return true;
+        }
+        return false;
+      }
+
+      if (!window.apSgReady) {
+        window.apSgReady = true;
+        document.addEventListener('click', function (e) {
+          var dlg = document.querySelector('[data-ap-sg]');
+          if (!dlg || !e.target.closest) return;
+          var opener = e.target.closest('[data-ap-sg-open]');
+          if (opener) {
+            addEu(dlg);
+            initFinder(dlg);
+            if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+            dlg.scrollTop = 0;
+          } else if (e.target.closest('[data-ap-sg-close]') || e.target === dlg) {
+            if (dlg.close) dlg.close(); else dlg.removeAttribute('open');
+          } else if (dlg.contains(e.target)) {
+            onFinderClick(e, dlg);
+          }
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key !== 'Enter' || !e.target.matches || !e.target.matches('[data-ap-sf-cm]')) return;
+          e.preventDefault();
+          var dlg = e.target.closest('[data-ap-sg]'), go = dlg && dlg.querySelector('[data-ap-sf-calc]');
+          if (go) go.click();
+        });
+      }
+    })();
+  </script>
+{%- endif -%}

@@ -1,0 +1,298 @@
+{%- comment -%}
+  AP 19.23: "Detalles del tejido" (zoals Shein): samenstelling, rek, transparantie, binnenkant, wassen.
+  Wordt afgeleid uit de productbeschrijving (sectie <h3>Composición y cuidados</h3> + tekst).
+  Alleen tonen wat we zeker weten: onbekend = rij weglaten.
+  Overschrijven kan met metafield custom.ap_tejido (json), bv. {"Composición":"75% nailon, 25% elastano","Elasticidad":"Alta"}.
+  Accepts: product
+{%- endcomment -%}
+{%- liquid
+  assign ap_f_override = product.metafields.custom.ap_tejido.value
+  assign ap_f_desc = product.description
+  assign ap_f_dl = ap_f_desc | strip_html | downcase
+
+  assign ap_f_comp = ''
+  assign ap_f_care = ''
+  if ap_f_desc contains '<h3>Composición y cuidados</h3>'
+    assign ap_f_sec = ap_f_desc | split: '<h3>Composición y cuidados</h3>' | last | split: '<h3>' | first
+    assign ap_f_comp = ap_f_sec | split: '<br>' | first | split: '</p>' | first | strip_html | remove_first: 'Composición:' | strip
+    assign ap_f_last = ap_f_comp | slice: -1
+    if ap_f_last == '.'
+      assign ap_f_len = ap_f_comp.size | minus: 1
+      assign ap_f_comp = ap_f_comp | slice: 0, ap_f_len
+    endif
+    assign ap_f_c5 = ap_f_comp | downcase | slice: 0, 5
+    if ap_f_c5 == 'lavar'
+      assign ap_f_comp = ''
+    endif
+    assign ap_f_cs = ap_f_sec | strip_html | downcase
+    if ap_f_cs contains 'a mano o a máquina'
+      assign ap_f_care = 'A mano o en lavadora, en frío'
+    elsif ap_f_cs contains 'lavar a mano'
+      assign ap_f_care = 'A mano, en frío'
+    elsif ap_f_cs contains 'a máquina'
+      assign ap_f_care = 'Lavadora en frío'
+    endif
+  endif
+
+  assign ap_f_el = ''
+  if ap_f_dl contains 'muy elástic' or ap_f_dl contains 'sin costuras' or ap_f_dl contains 'segunda piel' or ap_f_dl contains 'alta elasticidad'
+    assign ap_f_el = 'Alta'
+  elsif ap_f_dl contains 'elastano' or ap_f_dl contains 'elástic' or ap_f_dl contains 'spandex'
+    assign ap_f_el = 'Media'
+  endif
+
+  assign ap_f_tr = ''
+  if ap_f_dl contains 'algo transparente' or ap_f_dl contains 'semitransparente'
+    assign ap_f_tr = 'Algo transparente'
+  elsif ap_f_dl contains 'no transparenta' or ap_f_dl contains 'transparencias' or ap_f_dl contains 'opaco'
+    assign ap_f_tr = 'No transparenta'
+  endif
+
+  assign ap_f_in = ''
+  if ap_f_dl contains 'short interior'
+    assign ap_f_in = ap_f_in | append: ' · Short interior'
+  endif
+  if ap_f_dl contains 'copas extraíbles'
+    assign ap_f_in = ap_f_in | append: ' · Copas extraíbles'
+  elsif ap_f_dl contains 'copas integradas' or ap_f_dl contains 'tazas incorporadas'
+    assign ap_f_in = ap_f_in | append: ' · Copas integradas'
+  endif
+  if ap_f_dl contains 'forro'
+    assign ap_f_in = ap_f_in | append: ' · Con forro'
+  endif
+  assign ap_f_in = ap_f_in | slice: 3, 200
+
+  assign ap_f_rows = 0
+  if ap_f_comp != blank
+    assign ap_f_rows = ap_f_rows | plus: 1
+  endif
+  if ap_f_el != blank
+    assign ap_f_rows = ap_f_rows | plus: 1
+  endif
+  if ap_f_tr != blank
+    assign ap_f_rows = ap_f_rows | plus: 1
+  endif
+  if ap_f_in != blank
+    assign ap_f_rows = ap_f_rows | plus: 1
+  endif
+  if ap_f_care != blank
+    assign ap_f_rows = ap_f_rows | plus: 1
+  endif
+-%}
+{%- if ap_f_override != blank or ap_f_rows >= 2 -%}
+  <div class="ap-fab quick-add-hidden">
+    <p class="ap-fab__h">Detalles del tejido</p>
+    <dl class="ap-fab__list">
+      {%- if ap_f_override != blank -%}
+        {%- for ap_f_row in ap_f_override -%}
+          <div><dt>{{ ap_f_row[0] | escape }}</dt><dd>{{ ap_f_row[1] | escape }}</dd></div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- if ap_f_comp != blank -%}<div class="ap-fab__wide"><dt>Composición</dt><dd>{{ ap_f_comp | escape }}</dd></div>{%- endif -%}
+        {%- if ap_f_el != blank -%}<div><dt>Elasticidad</dt><dd>{{ ap_f_el }}</dd></div>{%- endif -%}
+        {%- if ap_f_tr != blank -%}<div><dt>Transparencia</dt><dd>{{ ap_f_tr }}</dd></div>{%- endif -%}
+        {%- if ap_f_in != blank -%}<div><dt>Interior</dt><dd>{{ ap_f_in }}</dd></div>{%- endif -%}
+        {%- if ap_f_care != blank -%}<div><dt>Lavado</dt><dd>{{ ap_f_care }}</dd></div>{%- endif -%}
+      {%- endif -%}
+    </dl>
+  </div>
+  <style>
+    .ap-fab { margin: .4rem 0 .8rem; padding: 1.2rem 1.4rem; border: 1px solid rgba(184,154,94,.45); }
+    .ap-fab__h { margin: 0 0 .8rem; font-size: 1.15rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    .ap-fab__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem 1.6rem; margin: 0; }
+    .ap-fab__list > div { min-width: 0; }
+    .ap-fab__wide { grid-column: 1 / -1; }
+    .ap-fab dt { font-size: 1.1rem; letter-spacing: .1em; text-transform: uppercase; opacity: .6; }
+    .ap-fab dd { margin: .15rem 0 0; font-size: 1.4rem; line-height: 1.4; }
+    .ap-fab dd::first-letter { text-transform: uppercase; }
+  </style>
+{%- endif -%}
+{%- comment -%}
+  19.27/19.28/19.29: reviewformulier van Judge.me in Aljarah-stijl.
+  - ?resena=1 achter een product-URL: reviewblok zichtbaar (ook zonder reviews) en "Escribir una reseña" opent vanzelf.
+  - &variant=<id>: die variant wordt gekozen; in het formulier staan de hele (niet bijgesneden) foto's van die kleur
+    plus "Tu pedido: Negro · S".
+  - &nombre=Ester (of ingelogde klant): begroeting "¿Qué te ha parecido, Ester?" en naamveld alvast ingevuld.
+  - Zonder parameters: elke klant die "Escribir una reseña" opent krijgt dezelfde stijl en foto's van de gekozen kleur.
+{%- endcomment -%}
+<style>
+  .jdgm-write-review-modal__container { background: #f7f3ec !important; color: #2b2420; }
+  .jdgm-write-review-modal__title { font-family: var(--font-heading-family) !important; font-weight: 400 !important; font-size: clamp(2.6rem, 6vw, 3.4rem) !important; line-height: 1.15 !important; color: #2b2420 !important; }
+  .jdgm-write-review-modal__intro { color: rgba(43,36,32,.75) !important; }
+  .jdgm-write-review-modal__product-title { font-family: var(--font-heading-family) !important; font-weight: 500 !important; font-size: 2rem !important; color: #2b2420 !important; }
+  .jdgm-write-review-modal__product-image.ap-rv-on { width: 100% !important; max-width: 36rem !important; height: auto !important; margin: 1.6rem auto 0 !important; border-radius: 0 !important; overflow: visible !important; background: none !important; }
+  .jdgm-write-review-modal__product-image.ap-rv-on > img { display: none !important; }
+  .ap-rv__main { display: block; width: 100%; height: auto; max-height: 58vh; object-fit: contain; background: #efe7da; }
+  .ap-rv__thumbs { display: flex; justify-content: center; gap: .6rem; margin-top: .8rem; flex-wrap: wrap; }
+  .ap-rv__thumbs button { width: 5.4rem; height: 7.2rem; padding: 0; border: 1px solid rgba(43,36,32,.18); background: #efe7da; cursor: pointer; }
+  .ap-rv__thumbs button[aria-current="true"] { border-color: #2b2420; box-shadow: inset 0 0 0 1px #2b2420; }
+  .ap-rv__thumbs img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .ap-rv__order { margin: .8rem 0 0; font-size: 1.2rem; letter-spacing: .18em; text-transform: uppercase; color: #b89a5e; text-align: center; }
+  .jdgm-write-review-modal__nav-btn, .jdgm-write-review-modal__btn { border-radius: 0 !important; letter-spacing: .14em !important; }
+  .ap-rv-cta { display: inline-flex; align-items: center; gap: .8rem; margin: .2rem 0 .6rem; padding: .4rem 0; border: 0; background: none; color: inherit; font: inherit; font-size: 1.3rem; cursor: pointer; text-align: left; }
+  .ap-rv-cta__stars { color: #b89a5e; font-size: 1.6rem; letter-spacing: .12em; line-height: 1; }
+  .ap-rv-cta__txt { text-decoration: underline; text-underline-offset: .35rem; }
+  .jdgm-prev-badge { cursor: pointer; }
+  body.ap-rv-open shopify-chat, body.ap-rv-open #shopify-chat { display: none !important; }
+</style>
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var isLink = q.get('resena') === '1';
+    var name = (q.get('nombre') || {{ customer.first_name | default: '' | json }} || '').trim().slice(0, 40);
+    var vidParam = q.get('variant');
+    var product = null;
+
+    if (isLink) {
+      var css = document.createElement('style');
+      css.textContent = '.shopify-section:has(.jdgm-review-widget),.shopify-section:has(.jdgm-rev-widg){display:block!important}';
+      document.head.appendChild(css);
+    }
+
+    fetch(location.pathname.replace(/\/$/, '').replace(/\/collections\/[^/]+/, '') + '.js')
+      .then(function (r) { return r.json(); }).then(function (p) { product = p; }).catch(function () {});
+
+    function currentVariant() {
+      if (!product) return null;
+      var id = vidParam;
+      var pick = document.querySelector('main product-info [name="id"], main form[action*="/cart/add"] [name="id"]');
+      if (!isLink && pick && pick.value) id = pick.value;
+      return (product.variants || []).filter(function (v) { return String(v.id) === String(id); })[0] || (product.variants || [])[0];
+    }
+    function sized(src, w) { src = String(src).replace(/^https?:/, ''); return src + (src.indexOf('?') > -1 ? '&' : '?') + 'width=' + w; }
+    function colourPhotos(v) {
+      var col = (v && v.option1 || '').toLowerCase();
+      var media = (product.media || []).filter(function (m) { return m.media_type === 'image'; });
+      var list = media.filter(function (m) { return col && (m.alt || '').toLowerCase().indexOf(col) > -1; });
+      var first = v && v.featured_media ? v.featured_media.id : null;
+      if (first) list.sort(function (a, b) { return (b.id === first) - (a.id === first); });
+      if (!list.length && v && v.featured_image) list = [{ src: v.featured_image.src, alt: v.featured_image.alt || '' }];
+      if (!list.length) list = media.slice(0, 4);
+      return list.slice(0, 5).map(function (m) { return { src: m.src || (m.preview_image && m.preview_image.src), alt: m.alt || '' }; });
+    }
+
+    function enhance(modal) {
+      if (!modal || modal.dataset.apRv || !product) return false;
+      var box = modal.querySelector('.jdgm-write-review-modal__product-image');
+      if (!box) return false;
+      modal.dataset.apRv = '1';
+      var v = currentVariant();
+      var photos = colourPhotos(v);
+      if (photos.length) {
+        box.classList.add('ap-rv-on');
+        var wrap = document.createElement('div');
+        wrap.className = 'ap-rv';
+        var main = document.createElement('img');
+        main.className = 'ap-rv__main'; main.alt = photos[0].alt; main.src = sized(photos[0].src, 1200);
+        wrap.appendChild(main);
+        if (photos.length > 1) {
+          var th = document.createElement('div'); th.className = 'ap-rv__thumbs';
+          photos.forEach(function (ph, k) {
+            var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', ph.alt || ('Foto ' + (k + 1)));
+            if (!k) b.setAttribute('aria-current', 'true');
+            var im = document.createElement('img'); im.src = sized(ph.src, 200); im.alt = '';
+            b.appendChild(im);
+            b.addEventListener('click', function () {
+              main.src = sized(ph.src, 1200); main.alt = ph.alt;
+              [].forEach.call(th.children, function (x) { x.removeAttribute('aria-current'); });
+              b.setAttribute('aria-current', 'true');
+            });
+            th.appendChild(b);
+          });
+          wrap.appendChild(th);
+        }
+        box.appendChild(wrap);
+      }
+      var t = modal.querySelector('.jdgm-write-review-modal__product-title');
+      if (t && v && product.variants.length > 1) {
+        var o = document.createElement('p'); o.className = 'ap-rv__order';
+        o.textContent = (isLink && vidParam ? 'Tu pedido: ' : '') + [v.option1, v.option2].filter(Boolean).join(' · ');
+        t.insertAdjacentElement('afterend', o);
+      }
+      if (name) {
+        var title = modal.querySelector('.jdgm-write-review-modal__page--review-form-intro .jdgm-write-review-modal__title');
+        var intro = modal.querySelector('.jdgm-write-review-modal__page--review-form-intro .jdgm-write-review-modal__intro');
+        if (title) title.textContent = '¿Qué te ha parecido, ' + name + '?';
+        if (intro) intro.textContent = 'Cuéntanos cómo te queda: tu opinión ayuda a otras chicas a elegir su talla.';
+        var ni = modal.querySelector('#jdgm-name-input');
+        if (ni && !ni.value) { ni.value = name; ni.dispatchEvent(new Event('input', { bubbles: true })); ni.dispatchEvent(new Event('change', { bubbles: true })); }
+      }
+      return true;
+    }
+
+    // Elke keer dat het formulier opent (ook zonder link) de stijl en foto's toepassen
+    var queued = false;
+    var obs = new MutationObserver(function () {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () {
+        queued = false;
+        var anyOpen = false;
+        [].forEach.call(document.querySelectorAll('.jdgm-write-review-modal__container'), function (m) {
+          if (m.getBoundingClientRect().height > 0) { anyOpen = true; if (!m.dataset.apRv) enhance(m); }
+        });
+        // chatknop weg zolang het reviewformulier open is
+        document.body.classList.toggle('ap-rv-open', anyOpen);
+      });
+    });
+    obs.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
+
+    // 19.28: altijd een reviewknop onder de titel (Judge.me verbergt de sterren bij 0 reviews)
+    function reviewsSection() {
+      return [].filter.call(document.querySelectorAll('.shopify-section'), function (x) { return x.querySelector('.jdgm-review-widget, .jdgm-rev-widg'); })[0];
+    }
+    function openWrite() {
+      var sec = reviewsSection();
+      if (sec) sec.style.setProperty('display', 'block', 'important');
+      var k = 0, iv = setInterval(function () {
+        k++;
+        var b = [].filter.call(document.querySelectorAll('.jm-action-buttons__button, .jdgm-write-rev-link, button, a'), function (e) {
+          return e.offsetParent !== null && !e.closest('.ap-rv-cta') && /escribir una rese|write a review/i.test(e.textContent);
+        })[0];
+        if (b) { clearInterval(iv); b.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(function () { b.click(); }, 650); }
+        if (k > 40) clearInterval(iv);
+      }, 300);
+    }
+    function goReviews() {
+      var sec = reviewsSection();
+      if (sec) { sec.style.setProperty('display', 'block', 'important'); sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    }
+    function addCta() {
+      if (document.querySelector('.ap-rv-cta')) return true;
+      var badge = document.querySelector('main .jdgm-prev-badge');
+      if (!badge || badge.closest('quick-add-modal')) return false;
+      var host = badge.closest('.shopify-app-block, .shopify-block') || badge;
+      var count = parseInt(badge.getAttribute('data-number-of-reviews') || '0', 10) || 0;
+      var el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'ap-rv-cta quick-add-hidden';
+      el.innerHTML = count
+        ? '<span class="ap-rv-cta__txt">Escribir una reseña</span>'
+        : '<span class="ap-rv-cta__stars" aria-hidden="true">☆☆☆☆☆</span><span class="ap-rv-cta__txt">Escribe la primera reseña</span>';
+      el.addEventListener('click', openWrite);
+      host.insertAdjacentElement('afterend', el);
+      // sterren (als er reviews zijn) klikbaar naar het reviewblok
+      badge.addEventListener('click', function (e) { e.preventDefault(); goReviews(); });
+      return true;
+    }
+    if (!addCta()) {
+      var tries = 0, ct = setInterval(function () { tries++; if (addCta() || tries > 30) clearInterval(ct); }, 400);
+    }
+
+    if (!isLink) return;
+    var n = 0, opened = false;
+    var timer = setInterval(function () {
+      n++;
+      var btn = [].filter.call(document.querySelectorAll('.jm-action-buttons__button, .jdgm-write-rev-link, button, a'), function (e) {
+        return e.offsetParent !== null && /escribir una rese|write a review/i.test(e.textContent);
+      })[0];
+      if (!opened && btn && product) {
+        opened = true;
+        clearInterval(timer);
+        btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(function () { btn.click(); }, 700);
+      }
+      if (n > 60) clearInterval(timer);
+    }, 500);
+  })();
+</script>

@@ -1,0 +1,178 @@
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "aj-style": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{{ 'aljarah-maison.css' | asset_url | stylesheet_tag }}<style>.utility-bar .announcement-bar-slider.slider-buttons{display:flex!important;}.ap-pay{display:flex;flex-wrap:wrap;gap:.6rem;list-style:none;margin:1.6rem 0 0;padding:0}.ap-pay svg{display:block;width:3.8rem;height:2.4rem}</style><script src=\"{{ 'ap-cart.js' | asset_url }}\" defer></script>{%- paginate collections.all.products by 250 -%}<script>window.apColors={ {%- for p in collections.all.products -%}{%- assign apc = p.options_with_values | where: 'name', 'Color' | first -%}{%- if apc and apc.values.size > 1 -%}{{ p.handle | json }}:{{ apc.values.size }},{%- endif -%}{%- endfor -%} };</script>{%- endpaginate -%}<style>.ap-cc{margin:.4rem 0 0;font-size:1.15rem;letter-spacing:.08em;color:rgba(var(--color-foreground),.6)}</style><script>(function(){function r(){document.querySelectorAll('.card-information').forEach(function(i){if(i.querySelector('.ap-cc'))return;var w=i.closest('.card__information');var a=w&&w.querySelector('.card__heading a[href*=\"/products/\"]');if(!a)return;var h=a.getAttribute('href').split('?')[0].split('/products/')[1];var n=window.apColors&&window.apColors[h];if(!n)return;var p=document.createElement('p');p.className='ap-cc';p.textContent=n+' colores';i.appendChild(p);});}document.addEventListener('DOMContentLoaded',function(){r();new MutationObserver(function(){r();}).observe(document.body,{childList:true,subtree:true});});})();</script>{%- comment -%} 19.24: Black Friday-week (20–26/11): zijlabel '-10%' weg, alleen de kraskaart {%- endcomment -%}{%- assign ap_bf_now = 'now' | date: '%s' | plus: 0 -%}{%- if ap_bf_now >= 1795129200 and ap_bf_now <= 1795733999 -%}<style>.ap-side-tab{display:none!important}</style>{%- endif -%}{%- comment -%} 19.28: Inbox-chatknop alleen op de homepage, en pas na scrollen; op andere pagina's verborgen {%- endcomment -%}{%- if request.page_type == 'index' -%}<style>body:not(.ap-chat-on) shopify-chat,body:not(.ap-chat-on) #shopify-chat{display:none!important}</style><script>(function(){function f(){if(window.scrollY>400){document.body.classList.add('ap-chat-on');window.removeEventListener('scroll',f);}}window.addEventListener('scroll',f,{passive:true});})();</script>{%- else -%}<style>shopify-chat,#shopify-chat{display:none!important}</style>{%- endif -%}",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "halloween-ticker": {
+      "type": "ap-ticker",
+      "blocks": {
+        "t0": {
+          "type": "item",
+          "settings": {
+            "text": "Black Friday anticipado: -15 % en vestidos de fiesta · hasta el 19/11",
+            "start_ts": "1794351600",
+            "end_ts": "1795129199",
+            "link": "shopify://collections/para-salir",
+            "highlight": true
+          }
+        },
+        "t1": {
+          "type": "item",
+          "settings": {
+            "text": "Envío gratis desde 35 €"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "text": "14 días para desistir"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "text": "Pago seguro con tarjeta o PayPal"
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "text": "Atención al cliente en español"
+          }
+        },
+        "t5": {
+          "type": "item",
+          "settings": {
+            "text": "Envío con seguimiento"
+          }
+        },
+        "t6": {
+          "type": "item",
+          "settings": {
+            "text": "10 % de descuento al comprar 2 o más artículos incluidos en la promoción",
+            "end_ts": "1795129199"
+          }
+        },
+        "t7": {
+          "type": "item",
+          "settings": {
+            "text": "10 % de descuento al comprar 2 o más artículos incluidos en la promoción",
+            "start_ts": "1795734000"
+          }
+        },
+        "tbf": {
+          "type": "item",
+          "settings": {
+            "text": "Black Friday: rasca y gana hasta un 20 % · hasta el 26/11",
+            "start_ts": "1795129200",
+            "end_ts": "1795734000",
+            "link": "shopify://collections/padel",
+            "highlight": true
+          }
+        }
+      },
+      "block_order": [
+        "t0",
+        "tbf",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "t6",
+        "t7"
+      ],
+      "settings": {
+        "enable": true,
+        "end_ts": "2000000000",
+        "label": "Ventajas de comprar en Aljarah Sol",
+        "link": "/collections/all",
+        "separator": "✦",
+        "speed": 44,
+        "bg": "#14100d",
+        "fg": "#f7f3ec",
+        "accent": "#b89a5e"
+      }
+    },
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "a1": {
+          "type": "announcement",
+          "settings": {
+            "text": "Envío gratis a la península desde 35 €",
+            "link": "shopify://collections/all"
+          }
+        },
+        "a2": {
+          "type": "announcement",
+          "settings": {
+            "text": "Envío con seguimiento",
+            "link": ""
+          }
+        },
+        "a3": {
+          "type": "announcement",
+          "settings": {
+            "text": "14 días para desistir",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "disabled": true,
+      "settings": {
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "color_scheme": "scheme-3",
+        "show_line_separator": false,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_position": "middle-left",
+        "mobile_logo_position": "center",
+        "menu": "menu-popflex",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "color_scheme": "scheme-1",
+        "menu_color_scheme": "scheme-1",
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "margin_bottom": 0,
+        "padding_top": 12,
+        "padding_bottom": 12
+      }
+    },
+    "ap-popflex": {
+      "type": "ap-popflex",
+      "settings": {
+        "tab_text": "-10% en tu primer pedido"
+      }
+    }
+  },
+  "order": [
+    "aj-style",
+    "ap-popflex",
+    "halloween-ticker",
+    "announcement-bar",
+    "header"
+  ]
+}

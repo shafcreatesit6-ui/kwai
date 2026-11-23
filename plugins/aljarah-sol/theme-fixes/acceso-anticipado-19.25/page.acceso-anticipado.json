@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "main": {
+      "type": "ap-early-access",
+      "settings": {
+        "image": "shopify://shop_images/aljarah-estela-rosa-lila-retrato.webp",
+        "image_alt": "Aljarah con el vestido Estela rosa lila en la pista",
+        "eyebrow": "Black Friday · Acceso anticipado",
+        "heading": "Entra antes que nadie",
+        "text": "Apúntate y compra el Black Friday de Aljarah Sol 24 horas antes que el resto, con un 20 % en tus looks de pádel.",
+        "open_ts": "1795042800",
+        "end_ts": "1795733999",
+        "code": "ACCESO20",
+        "shop_link": "shopify://collections/padel"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

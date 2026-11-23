@@ -1,0 +1,81 @@
+{%- comment -%}
+  AP: brede sfeerfoto (liggend) op een productpagina.
+  Toont alleen op het product met de ingestelde handle; laat 'Alleen op product' leeg om hem overal te tonen.
+{%- endcomment -%}
+{%- liquid
+  assign ap_lb_show = true
+  if section.settings.only_handle != blank and product.handle != section.settings.only_handle
+    assign ap_lb_show = false
+  endif
+  assign ap_lb_img = section.settings.image
+  assign ap_lb_mob = section.settings.image_mobile | default: section.settings.image
+-%}
+{%- if ap_lb_show and ap_lb_img != blank -%}
+  <div class="ap-lb">
+    <picture>
+      <source
+        media="(max-width: 749px)"
+        srcset="{{ ap_lb_mob | image_url: width: 750 }} 750w, {{ ap_lb_mob | image_url: width: 1000 }} 1000w"
+        sizes="100vw"
+      >
+      <img
+        src="{{ ap_lb_img | image_url: width: 1600 }}"
+        srcset="{{ ap_lb_img | image_url: width: 1000 }} 1000w, {{ ap_lb_img | image_url: width: 1600 }} 1600w, {{ ap_lb_img | image_url: width: 2000 }} 2000w"
+        sizes="100vw"
+        alt="{{ ap_lb_img.alt | escape }}"
+        width="{{ ap_lb_img.width }}"
+        height="{{ ap_lb_img.height }}"
+        loading="lazy"
+        style="{{ section.settings.focal }}"
+      >
+    </picture>
+    {%- if section.settings.heading != blank or section.settings.text != blank -%}
+      <div class="ap-lb__content page-width">
+        {%- if section.settings.eyebrow != blank -%}<p class="ap-lb__cap">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 class="ap-lb__title">{{ section.settings.heading | escape }}</h2>{%- endif -%}
+        {%- if section.settings.text != blank -%}<p class="ap-lb__text">{{ section.settings.text | escape }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+  <style>
+    .ap-lb { position: relative; overflow: hidden; background: #e7e2db; }
+    .ap-lb picture { display: block; aspect-ratio: 4 / 5; }
+    .ap-lb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .ap-lb::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, rgba(31,26,22,.6) 0%, rgba(31,26,22,.25) 40%, rgba(31,26,22,0) 65%); }
+    .ap-lb__content { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding-bottom: 3.2rem; color: #fff; }
+    .ap-lb__cap { margin: 0 0 .8rem; font-size: 1.1rem; letter-spacing: .32em; text-transform: uppercase; color: #fff; opacity: .9; }
+    .ap-lb__title { margin: 0; font-family: var(--font-heading-family); font-weight: 400; font-size: calc(var(--font-heading-scale) * 3.2rem); line-height: 1.1; color: #fff; }
+    .ap-lb__text { margin: 1rem 0 0; max-width: 44rem; font-size: 1.5rem; line-height: 1.5; color: #fff; opacity: .9; }
+    @media screen and (min-width: 750px) {
+      .ap-lb picture { aspect-ratio: 16 / 7; }
+      .ap-lb__content { padding-bottom: 5.6rem; }
+      .ap-lb__title { font-size: calc(var(--font-heading-scale) * 4.8rem); }
+    }
+  </style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "AP liggende sfeerfoto",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Foto (liggend)" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Foto mobiel (staand, optioneel)" },
+    {
+      "type": "select", "id": "focal", "label": "Focuspunt",
+      "options": [
+        { "value": "object-position: 50% 50%", "label": "Midden" },
+        { "value": "object-position: 50% 25%", "label": "Boven" },
+        { "value": "object-position: 50% 75%", "label": "Onder" }
+      ],
+      "default": "object-position: 50% 50%"
+    },
+    { "type": "text", "id": "only_handle", "label": "Alleen op product (handle)" },
+    { "type": "text", "id": "eyebrow", "label": "Klein kopje" },
+    { "type": "text", "id": "heading", "label": "Kop" },
+    { "type": "text", "id": "text", "label": "Tekst" }
+  ],
+  "presets": [ { "name": "AP liggende sfeerfoto" } ]
+}
+{% endschema %}
